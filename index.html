@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Design.py - Your MEP AI Engineer Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #e9eff5;
+      color: #333;
+    }
+
+    /* Login Page */
+    .login-wrapper {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, #222, #111);
+    }
+
+    .login-box {
+      background-color: #2c2c2c;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      text-align: center;
+      color: white;
+      width: 320px;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .login-box h2 span {
+      color: orange;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #555;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .login-box button:hover {
+      background-color: #777;
+    }
+
+    /* Chat App Styles (same as before) */
+     
+
+    header {
+      background-color: #004aad;
+      color: white;
+      padding: 16px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .container {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+
+    .chat-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: #ffffff;
+      border-right: 1px solid #ccc;
+      padding: 20px;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      border-bottom: 1px solid #eee;
+    }
+
+    .input-area {
+      display: flex;
+      border-top: 1px solid #eee;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .input-area button {
+      background-color: #004aad;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .input-area button:hover {
+      background-color: #0056b3;
+    }
+
+    .pdf-preview {
+      width: 0;
+      overflow: hidden;
+      background-color: white;
+      transition: width 0.3s ease-in-out;
+      border-left: 1px solid #ccc;
+      padding: 0;
+    }
+
+    .pdf-preview.active {
+      width: 45%;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(to bottom right, #ddeeff, #c7dbfc);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-top-left-radius: 25px;
+      border-bottom-left-radius: 25px;
+      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdowns label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .dropdowns select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #bbb;
+      border-radius: 8px;
+      font-size: 14px;
+      background-color: #fff;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .chat-list {
+      background-color: #ffffff;
+      padding: 10px;
+      height: 80px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background-color: #004aad;
+      color: white;
+      font-weight: 600;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar button:hover {
+      background-color: #0056b3;
+    }
+
+    .user-message, .bot-message {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      max-width: 90%;
+    }
+
+    .user-message {
+      background-color: #dff0ff;
+      align-self: flex-end;
+    }
+
+    .bot-message {
+      background-color: #e2ffe8;
+      align-self: flex-start;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div class="login-wrapper" id="loginPage">
+  <div class="login-box">
+    <h2>Welcome to <br><span>Design.py</span><br>your MEP engineer <br>AI Tool</h2>
+    <input type="text" id="username" placeholder="User Name">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="handleLogin()">LOGIN</button>
+    <p style="margin:10px 0;">OR</p>
+    <button onclick="alert('Google Login Coming Soon')">Continue with Google</button>
+  </div>
+</div>
+
+<!-- Main Chat App -->
+<div id="app-container">
+  <header>Welcome to Design.py - Your MEP Engineer AI Tool</header>
+
+  <div class="container">
+    <!-- Chat Section -->
+    <div class="chat-section" id="chatSection">
+      <div class="chat-box" id="chatBox">
+        <div class="bot-message"><strong>AI:</strong> Welcome! Ask your question.</div>
+      </div>
+      <div class="input-area">
+        <input type="text" id="userInput" placeholder="Ask your question..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <!-- PDF Preview Section -->
+    <div class="pdf-preview" id="pdfPreview">
+      <h3>PDF Preview</h3>
+      <p id="pdfFilename">No PDF selected</p>
+      <iframe id="pdfViewer" title="PDF Viewer" style="width:100%; height:80vh; border:none;"></iframe>
+    </div>
+
+    <!-- Sidebar Section -->
+    <div class="sidebar">
+      <div>
+        <div class="dropdowns">
+          <label for="collectionDropdown">Select Collection</label>
+          <select id="collectionDropdown">
+            <option>Loading...</option>
+          </select>
+
+          <label for="pdfDropdown">Standard PDFs</label>
+          <select id="pdfDropdown">
+            <option>Loading PDFs...</option>
+          </select>
+        </div>
+      </div>
+
+      <button>Profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script>
+  const collectionDropdown = document.getElementById("collectionDropdown");
+  const pdfDropdown = document.getElementById("pdfDropdown");
+  const chatBox = document.getElementById("chatBox");
+  const userInput = document.getElementById("userInput");
+  const pdfPreview = document.getElementById("pdfPreview");
+  const pdfFilename = document.getElementById("pdfFilename");
+  const pdfViewer = document.getElementById("pdfViewer");
+
+  // === Load Collections ===
+  async function loadCollections() {
+    try {
+      collectionDropdown.innerHTML = `<option value="ALL">Loading...</option>`;
+      const response = await fetch(`/api/list-collections`);
+      const data = await response.json();
+
+      collectionDropdown.innerHTML = `<option value="ALL">All Collections</option>`;
+      if (data.collections) {
+        data.collections.forEach(name => {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          collectionDropdown.appendChild(option);
+        });
+      }
+    } catch (error) {
+      console.error("Error loading collections:", error);
+      alert("Failed to load collections.");
+    }
+  }
+
+  // === Load PDFs ===
+  async function loadPDFs() {
+    try {
+      pdfDropdown.innerHTML = `<option value="">Loading PDFs...</option>`;
+      const response = await fetch(`/api/list-pdfs`);
+      const data = await response.json();
+
+      pdfDropdown.innerHTML = `<option value="">Select a Standard PDF</option>`;
+      if (data.pdfs) {
+        data.pdfs.forEach(pdf => {
+          const option = document.createElement("option");
+          option.value = pdf;
+          option.textContent = pdf;
+          pdfDropdown.appendChild(option);
+        });
+      }
+    } catch (error) {
+      console.error("Error loading PDFs:", error);
+      alert("Failed to load PDF list.");
+    }
+  }
+
+  // === Handle PDF Selection ===
+  pdfDropdown.addEventListener("change", () => {
+    const selected = pdfDropdown.value;
+    if (selected) {
+      pdfPreview.classList.add("active");
+      pdfFilename.textContent = "Selected PDF: " + selected;
+      pdfViewer.src = `/pdfs/${selected}`;
+    } else {
+      pdfPreview.classList.remove("active");
+      pdfFilename.textContent = "No PDF selected";
+      pdfViewer.src = "";
+    }
+  });
+
+  // === Send Chat Message ===
+  async function sendMessage() {
+    const message = userInput.value.trim();
+    const selectedCollection = collectionDropdown.value;
+
+    if (!message) return;
+
+    const userMsg = document.createElement("div");
+    userMsg.className = "user-message";
+    userMsg.innerHTML = `<strong>You:</strong> ${message}`;
+    chatBox.appendChild(userMsg);
+
+    const typingMsg = document.createElement("div");
+    typingMsg.className = "bot-message";
+    typingMsg.id = "typing";
+    typingMsg.innerHTML = `<em>Typing...</em>`;
+    chatBox.appendChild(typingMsg);
+
+    userInput.value = "";
+
+    const selectedCollections =
+      selectedCollection === "ALL"
+        ? Array.from(collectionDropdown.options)
+            .map(opt => opt.value)
+            .filter(val => val !== "ALL")
+        : [selectedCollection];
+
+    try {
+      const response = await fetch(`/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collection_id: selectedCollections,
+          query: message,
+          top_k: 5
+        })
+      });
+
+      const data = await response.json();
+      typingMsg.remove();
+
+      const botMsg = document.createElement("div");
+      botMsg.className = "bot-message";
+      botMsg.innerHTML = `<strong>AI:</strong> ${data.answer || "No response received."}`;
+      chatBox.appendChild(botMsg);
+    } catch (error) {
+      typingMsg.remove();
+      const errMsg = document.createElement("div");
+      errMsg.className = "bot-message";
+      errMsg.innerHTML = `<strong>AI:</strong> Error: ${error.message}`;
+      chatBox.appendChild(errMsg);
+    }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  userInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  // === Login ===
+ document.getElementById("app-container").style.display = "none";
+
+    async function handleLogin() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!username || !password) {
+        alert("Please enter both username and password.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success === true) {
+          document.getElementById("app-container").style.display = "block";
+          document.getElementById("loginPage").style.display = "none";
+          loadCollections();
+          loadPDFs();
+        } else {
+          alert("Invalid username or password.");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("Server error during login.");
+      }
+    }
+</script>
+
+</body>
+</html>
