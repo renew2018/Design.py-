@@ -1,0 +1,3071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Design.py</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Carter+One&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #222;
+      background: #e9e9e9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    #main-header, #site-footer { display: none; }
+    body.show-headerfooter #main-header,
+    body.show-headerfooter #site-footer {
+      display: flex;
+    }
+   /* Header styles */
+.header-bar {
+  position: fixed;
+  font-size: 0.5cm;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 105px;
+  width: 100%;              /* fixed */
+  background: #ffffff;      /* fixed */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4vw;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* subtle shadow for better look */
+}
+.brand-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.2;
+}
+.brand-left img {
+  width: 120px;   /* increased logo size */
+  height: auto;
+  margin-bottom: 5px;
+}
+.brand-left .provided-by {
+  font-size: 0.95em;
+  color: #222;
+  margin-top: 1px;
+}
+.brand-left .orange {
+  color: #ff5100;
+  font-weight: 700;
+}
+nav.top-nav ul {
+  display: flex;
+  gap: 1.5em;      /* a little more spacing between links */
+  list-style: none;
+  font-weight: 600;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+nav.top-nav a {
+  color: #000;
+  text-decoration: none;
+  padding: 6px 10px; /* slightly larger clickable area */
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+nav.top-nav a:hover,
+nav.top-nav a:focus,
+nav.top-nav a.active {
+  border-bottom-color: #ff5100;
+  color: #ff5100;  /* also change text color on hover for better effect */
+}
+    footer.site-footer {
+  width: 100%;
+  background: #fff; color: #111; border-top: 1px solid #cfcfcf;
+  padding: 18px 4vw 14px; position: relative;
+  margin-top: auto; z-index: 500;
+  display: flex; flex-direction: column;
+}
+.footer-grid {
+  display: grid; gap: 14px; align-items: start;
+  grid-template-columns: 1fr 2fr 1.3fr;
+  max-width: 1200px; margin: 0 auto;
+}
+/* ---- UPDATED CENTER COLUMN ---- */
+.footer-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      
+  justify-content: center;
+  text-align: center;
+  justify-self: center;     /* Center the entire column */
+}
+.footer-mid strong {
+  margin-bottom: 8px;
+  font-size: 0.5cm;
+  display: block;
+}
+.footer-mid > div {
+  text-align: center;
+  margin-bottom: 8px;
+}
+/* Social icons */
+.footer-social {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: transparent;
+  transition: box-shadow 0.18s, transform 0.16s;
+}
+.footer-social a.yt:hover {
+  background: #cc0000;
+  box-shadow: 0 2px 7px rgba(204,0,0,0.20);
+  transform: scale(1.08);
+}
+.footer-social a.li:hover {
+  background: #0a66c2;
+  box-shadow: 0 2px 7px rgba(10,102,194,0.18);
+  transform: scale(1.08);
+}
+.footer-social svg {
+  width: 28px;
+  height: 28px;
+  display: block;
+  fill: #fff;
+}
+/* ---- END UPDATED CENTER COLUMN ---- */
+.footer-col ul { list-style: none;font-size: 0.5cm; text-align: left; }
+.footer-col a { color: #111; text-decoration: none; }
+.footer-col a:hover { text-decoration: underline;  }
+.footer-mid strong { display: block; margin-bottom: 6px; }
+.footer-copy { max-width: 1200px; margin: 14px auto 0; border-top: 1px solid #cfcfcf; padding-top: 8px; text-align: center; font-size: .92em; }
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1cm; }
+}
+.footer-grid {
+  display: grid;
+  gap: 30px;
+  align-items: start;
+  grid-template-columns: 1fr 2fr 1fr;  /* center a little wider */
+  max-width: 1800px;
+  margin: 0 auto;
+}
+/* Left column (menu links) */
+.footer-col:first-child {
+  text-align: right;            /* align text to left */
+  justify-self: start;
+}
+/* Right column (contact details) */
+.footer-col:last-child {
+  font-size: 0.47cm;
+  text-align: start;   /* align all contact info under "Contact" */
+  justify-self: right;  /* still keeps it on the right side */
+}
+    /* ==== Frontpage ==== */
+    #frontpage-container { display: none; flex: 1; flex-direction: column; align-items: center; }
+    .hero {
+      min-height: calc(100vh - 64px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 16px; text-align: center;
+      padding: 40px 20px;
+      width: 100%;
+      background: linear-gradient(to bottom, #ffffff 50%, #797775 100%);
+      border-bottom: none;
+      margin-top: 64px;
+    }
+    .hero h1 { 
+      font-size: 2cm; 
+      font-family: "Cinzel Decorative", serif;
+      font-weight: 700; 
+      color: #222; line-height: 1.25;
+     }
+    .hero .tag {
+  font-family: 'Carter One', normal;
+  max-width: 1400px;
+  margin: 0 auto 40px auto;  /* added bottom margin for spacing */
+  color: #2a2a2a;
+  font-size: 0.9cm;
+  font-weight: normal;
+  margin-top: 20px;
+}
+.btn {
+  display: inline-block;
+  padding: 18px 30px;
+  border-radius: 25px;
+  border: 0;
+  cursor: pointer;
+  background: #363535;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .20em;
+  text-transform: uppercase;
+  transition: transform .15s ease, background .25s ease;
+  margin-top: 20px;  /* ensures button has breathing space from the tag */
+}
+.btn:hover,
+.btn:focus {
+  background: #222;
+  transform: scale(1.08);  /* slightly more zoom on hover */
+}
+    .section-wrap { 
+      max-width: 1024px; 
+      width: 96%; 
+      margin: 26px auto; 
+    }
+    .section-wrap h2 {
+      font-size: 1cm; 
+      font-weight: 700; 
+      margin-bottom: 12px;
+    }
+    .section-wrap ul { 
+      padding-left: 18px; 
+    }
+    .section-wrap li {
+  font-size: 0.6cm;
+  width: 100%;       /* full page width */
+  margin-bottom: 10px;
+  line-height: 1.62;
+  max-width: none;   /* overrides 1400px */
+}
+    .view { display: none; }
+    .view.active { display: block; }
+    /* ==== Login ==== */
+ #login-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #9c9c9c, #ffffff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+   .login-box {
+  background: linear-gradient(to bottom, 
+    #a6a6a6 15%, 
+    #ffffff 100%);
+  padding: 70px;         /* more inner spacing */
+  border-radius: 50px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+  width: 500px;          /* increased width */
+  height: 550px;         /* increased height */
+  text-align: center;
+  animation: fadeIn 0.6s ease-in-out;
+}
+    .login-box h2 { margin-bottom: 10px; font-size: 1cm; font-family: "Cinzel Decorative", serif; color: #ffffff; }
+    .login-box .subtitle { margin-bottom: 25px; font-size: 0.52cm; font-family: "Cinzel Decorative", serif; color: #181818; font-weight: bold; }
+    .login-box input {width: 100%; padding: 13px; margin: 10px 0; border: 1px solid #000000; border-radius: 10px;outline: none; font-size: 22px; font-family:'Times New Roman', Times, serif; transition: border-color 0.3s; }
+    .login-box input:focus { border-color: #080808; }
+    .login-box .login-btn { width: 50%; padding: 15px; margin: 15px auto 0; display: block; background: #3f3f41; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 22px; font-family:'Times New Roman', Times, serif; font-weight: 600; transition: background 0.3s;}
+    .login-box .login-btn:hover { background: #3e3f41;}
+    .divider { margin: 20px 0; font-size: 16px; font-family:'kite one' serif; color: #000000; position: relative; }
+    .divider::before,
+    .divider::after { content: ""; position: absolute; top: 50%; width: 40%; height: 1px; background: #7c7979;}
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+    .google-btn { width: 100%; padding: 15px; background: #fff; color: #444; border: 1px solid #000000; border-radius: 10px; cursor: pointer; font-size: 22px; font-family:'Times New Roman', Times, serif; transition: all 0.3s; font-weight: bold; }
+    .google-btn:hover { background: #f3f4f6; }
+     /* ==== Dashboard ==== */
+#dashboard-container {
+  text-align: center;
+  background: linear-gradient(to bottom, #9c9c9c, #ffffff);
+  padding: 60px 20px;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+#dashboard-container h1 {
+  font-family: "Cinzel Decorative", normal;
+  font-size: 1.1cm;
+  font-weight: 700;
+  margin-bottom: 50px;
+  color: #000000;
+  text-shadow: #ffffff;
+  word-spacing: 3px;
+}
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 900px;
+  width: 100%;
+}
+.tool-card {
+  background: #a6a6a6;
+  color: #000000;
+  border-radius: 25px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  font-family: 'Times New Roman', Times, serif;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  user-select: none;
+  width: 250px;
+  height: 200px;
+  box-shadow: none;
+  border: 3px solid #494949;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 0;
+  padding: 0;
+}
+.tool-card.hovered,
+.tool-card.active {
+  background: linear-gradient(to bottom, #ffffff 50%, #887f76 100%);
+  box-shadow: 0 0 25px 5px rgba(255, 255, 255, 0.9);
+  transform: scale(1.08);
+  z-index: 10;
+}
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 22px;
+  background: transparent;
+  display: block;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+  transform-origin: center;
+}
+.tool-card.hovered .card-img,
+.tool-card.active .card-img {
+  transform: scale(1.05);
+}
+@media (max-width: 990px) {
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 600px;
+  }
+}
+@media (max-width: 660px) {
+  .tool-grid {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+  }
+  .tool-card {
+    width: 90vw;
+    font-size: 18px;
+    height: 120px;
+  }
+  #dashboard-container h1 {
+    font-size: 0.8cm;
+  }
+}
+/* ==== Chat ==== */
+#app-container {
+  display: none;
+  height: 100vh;
+  flex-direction: column;
+}
+/* ==== Header ==== */
+#app-container header {
+  background: linear-gradient(to bottom, #534e4e, #666666);
+  border: 1px solid #000000;
+  color: rgb(240, 238, 238);
+  padding: 16px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: 'Edo', cursive;
+  text-shadow: 1px 1px 1px #000000;
+  cursor: pointer;
+  user-select: none;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* ==== Main Container ==== */
+.container {
+  display: flex;
+  height: calc(100vh - 60px);
+  margin-right: 320px;
+  transition: all 0.3s ease-in-out;
+}
+/* ==== Sidebar ==== */
+.sidebar {
+  width: 320px;
+  background: linear-gradient(to bottom, #b3b3b3, #ffffff);
+  border: 1px solid #000000;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  border-left: 1px solid #2a2a2a;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 15px;
+  overflow-y: auto;
+}
+/* ==== Dropdown Styles ==== */
+.dropdowns label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 16px;
+}
+.dropdowns select {
+  width: 100%;
+  font-size: 16px;
+  height: 50px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  border: 2px solid #444;
+  border-radius: 8px;
+  font-family: 'Times New Roman', serif;
+  background-color: #f7f7f7;
+  color: #222;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.dropdowns select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+.dropdowns select:hover {
+  border-color: #666;
+}
+/* ==== Chat Section ==== */
+.chat-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-right: 1px solid #ccc;
+  padding: 20px;
+  width: 100%;
+  overflow: hidden;
+}
+/* ==== Chat Box ==== */
+.chat-box {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  border-bottom: 1px solid #eee;
+  background: #fafafa;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+/* ==== Input Area ==== */
+.input-area {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+.input-area input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-area input:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+.input-area button {
+  background-color: #2a2a2b;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: background-color 0.3s, transform 0.1s;
+  min-width: 80px;
+}
+.input-area button:hover {
+  background-color: #545455;
+  transform: translateY(-1px);
+}
+.input-area button:active {
+  transform: translateY(0);
+}
+/* ==== PDF Preview ==== */
+.pdf-preview {
+  width: 0;
+  overflow: hidden;
+  background-color: white;
+  transition: all 0.3s ease-in-out;
+  border-left: 1px solid #ccc;
+  padding: 0;
+}
+.pdf-preview.active {
+  width: 65%;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+/* ==== Home Button ==== */
+.home-button {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #424141;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ccc4c4;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 1000;
+}
+.home-button:hover {
+  background-color: #000;
+  transform: translateX(-50%) scale(1.1);
+  color: #fff;
+}
+/* ==== Animations ==== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ==== Chat Messages ==== */
+.user-message, .bot-message {
+  margin: 10px 0;
+  padding: 5px 0;
+  border-radius: 0;
+  background: none;
+  white-space: pre-wrap;
+  max-width: 100%;
+  line-height: 1.5;
+  font-size: 14px;
+  color: #181818;
+}
+.user-message {
+  font-weight: bold;
+  text-align: right;
+  font-family: 'Times New Roman', cursive;
+}
+.bot-message {
+  text-align: left;
+  font-family: 'Times New Roman', serif;
+}
+/* ==== Responsive Design ==== */
+@media (max-width: 768px) {
+  .container {
+    margin-right: 0;
+    flex-direction: column;
+  }
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+  }
+  .chat-section {
+    padding: 15px;
+  }
+  .home-button {
+    bottom: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
+/* ==== Scrollbar Styling ==== */
+.chat-box::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-box::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+.chat-box::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+.chat-box::-webkit-scrollbar-thumb:hover,
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+/* ==== AI Duct Sizing Tool CSS ==== */
+#ductTool {
+  display: none;
+  padding: 15px;
+  background: #ececec !important; /* Light grey background */
+  width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.table-container {
+  width: 100%;
+  max-width: calc(100vw - 30px);
+  height: 75vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  background: white;
+  position: relative;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 0.85rem;
+  table-layout: fixed;
+  position: relative;
+}
+.data-table th {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: middle;
+  background: linear-gradient(135deg, #eb8108, #d67207);
+  color: #000;
+  font-size: 0.82rem;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.data-table th::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 4px; height: 100%;
+  background: transparent; cursor: col-resize; z-index: 15;
+  border-right: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.data-table th:hover::after { border-right-color: rgba(255,255,255,0.6); }
+.data-table th.resizing::after { border-right-color: #fff; background: rgba(255,255,255,0.3); }
+/* Default column widths */
+.data-table th:nth-child(1)  { width: 60px;  min-width: 50px; }
+.data-table th:nth-child(2)  { width: 200px; min-width: 120px; }
+.data-table th:nth-child(3)  { width: 140px; min-width: 100px; }
+.data-table th:nth-child(4)  { width: 80px;  min-width: 60px;}
+.data-table th:nth-child(5)  { width: 120px; min-width: 100px;}
+.data-table th:nth-child(6)  { width: 100px; min-width: 80px;}
+.data-table th:nth-child(7)  { width: 110px; min-width: 90px;}
+.data-table th:nth-child(8)  { width: 120px; min-width: 100px;}
+.data-table th:nth-child(9)  { width: 110px; min-width: 90px;}
+.data-table th:nth-child(10) { width: 100px; min-width: 80px;}
+.data-table th:nth-child(11) { width: 100px; min-width: 80px;}
+.data-table th:nth-child(12) { width: 120px; min-width: 100px;}
+.data-table th:nth-child(13) { width: 130px; min-width: 110px;}
+.data-table th:nth-child(14) { width: 130px; min-width: 110px;}
+.data-table th:nth-child(15) { width: 130px; min-width: 110px;}
+.data-table th:nth-child(16) { width: 110px; min-width: 90px;}
+.data-table th:nth-child(17) { width: 120px; min-width: 100px;}
+.data-table th:nth-child(18) { width: 110px; min-width: 90px;}
+.data-table th:nth-child(19) { width: 120px; min-width: 100px;}
+.data-table td {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.editableinput { width: 100%; box-sizing: border-box; border: 1px solid #ddd; border-radius: 3px; font-size: 0.8rem; padding: 4px 6px; height: 26px; background: transparent; }
+.tagname-input { min-width: 100px !important; }
+
+.actions {
+  display: flex; gap: 12px; align-items: center; margin-bottom: 15px;
+  justify-content: center; flex-wrap: wrap; padding: 10px 0;
+  background: #ececec !important;
+}
+.actions button,
+.actions label[role="button"] { background: #000 !important; color: #fff !important; font-weight: bold; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 0.9rem; min-width: 120px; text-align: center; transition: all 0.3s ease; }
+.actions button:hover,
+.actions label[role="button"]:hover { background: #333 !important; transform: translateY(-1px); }
+
+#ductTool h2 { font-family: 'Carter One', cursive; font-size: 1.8rem; font-weight: 700; color: #000; text-align: center; margin-bottom: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);}
+.auto-calc { background-color: #f8f9fa !important; color: #666 !important; font-weight: 500;}
+.target-value { background-color: #e3f2fd !important; font-weight: bold !important;}
+.override-field { border: 2px dashed #ec7310ec !important;}
+.highlight { background: linear-gradient(135deg, #ffe1e1, #ffd6d6) !important; color: #b30000 !important; font-weight: 600 !important;}
+.merged-row { background: linear-gradient(135deg, #e8f5e8, #d4edda) !important; color: #000000 !important; font-weight: bold !important; border-left: 4px solid #ffffff !important;}
+.critical-highlight { color: red; font-weight: bold; }
+
+@media (max-width: 1200px) { .data-table th, .data-table td { font-size: 0.8rem; padding: 5px 6px; } }
+@media (max-width: 768px) {
+  #ductTool { padding: 10px; } 
+  .table-container { max-width: calc(100vw - 20px); height: 70vh; }
+  .actions { gap: 8px; }
+  .actions button, .actions label[role="button"] { min-width: 100px; padding: 6px 12px; font-size: 0.85rem;}
+}
+.data-table.resizing { cursor: col-resize; }
+.data-table.resizing * { cursor: col-resize !important; }
+
+/* AI Pipe Sizing Tool styles */
+#pipeSizerTool {
+  display: none;
+  padding: 15px;
+  background: #f7f9fc !important;
+  width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+#pipeSizerTool h2 {
+  font-family: 'Carter One', cursive;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000;
+  text-align: center;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  background: #f1f4f8 !important;
+  border-radius: 6px;
+}
+.actions button,
+.actions label[role="button"] {
+  background: #0c0c0c !important;
+  color: white !important;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 18px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  min-width: 130px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.actions button:hover,
+.actions label[role="button"]:hover {
+  background: #77797c !important;
+  transform: translateY(-1px);
+}
+.table-container {
+  width: 100%;
+  max-width: calc(100vw - 30px);
+  max-height: 75vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  background: white;
+  position: relative;
+}
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 0.85rem;
+  table-layout: fixed;
+}
+table.data-table th,
+table.data-table td {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+table.data-table th {
+  background: linear-gradient(135deg, #f36f18);
+  color: #000000;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  user-select: none;
+  cursor: col-resize;
+  position: relative;
+}
+table.data-table th.resizing {
+  background: #f36f18;
+}
+.editableinput {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  padding: 4px 6px;
+  height: 28px;
+  background: transparent;
+  transition: border-color 0.3s ease;
+}
+.editableinput:focus {
+  border-color: #1f1e1e;
+  outline: none;
+  background: #e9f0ff;
+}
+tr.critical {
+  background-color: #ffd2d2;
+  font-weight: bold;
+}
+
+/* AI Cable Schedule Tool styles */
+#cableScheduleTool {
+  display: none; /* Hidden by default */
+  padding: 15px;
+  background: #f7f9fc !important;
+  width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+.table-container {
+  width: 100%;
+  max-width: calc(100vw - 30px);
+  height: 75vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  background: white;
+  position: relative;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 0.85rem;
+  table-layout: fixed;
+  position: relative;
+}
+.data-table th {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: middle;
+  background: linear-gradient(135deg, #f36f18);
+  color: #000000;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.data-table th::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  background: transparent;
+  cursor: col-resize;
+  z-index: 15;
+  border-right: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+#cableScheduleTool h2 {
+  font-family: 'Carter One', cursive;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000;
+  text-align: center;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+.data-table th:hover::after {
+  border-right-color: rgba(255, 255, 255, 0.75);
+}
+.data-table th.resizing::after {
+  border-right-color: #fff;
+  background: rgba(255, 255, 255, 0.4);
+}
+.data-table th:nth-child(1) { width: 60px; min-width: 50px; }
+.data-table th:nth-child(2) { width: 140px; min-width: 120px; }
+.data-table th:nth-child(3) { width: 160px; min-width: 140px; }
+.data-table th:nth-child(4) { width: 130px; min-width: 110px; }
+.data-table th:nth-child(5) { width: 120px; min-width: 110px; }
+.data-table th:nth-child(6) { width: 110px; min-width: 100px; }
+.data-table th:nth-child(7) { width: 110px; min-width: 90px; }
+.data-table th:nth-child(8) { width: 100px; min-width: 90px; }
+.data-table th:nth-child(9) { width: 110px; min-width: 90px; }
+.data-table th:nth-child(10) { width: 110px; min-width: 90px; }
+.data-table th:nth-child(11) { width: 100px; min-width: 80px; }
+.data-table th:nth-child(12) { width: 100px; min-width: 80px; }
+.data-table th:nth-child(13) { width: 130px; min-width: 110px; }
+.data-table th:nth-child(14) { width: 120px; min-width: 100px; }
+.data-table th:nth-child(15) { width: 130px; min-width: 120px; }
+.data-table th:nth-child(16) { width: 120px; min-width: 100px; }
+.data-table th:nth-child(17) { width: 110px; min-width: 90px; }
+.data-table th:nth-child(18) { width: 120px; min-width: 100px; }
+.data-table th:nth-child(19) { width: 130px; min-width: 115px; }
+.data-table th:nth-child(20) { width: 110px; min-width: 90px; }
+.data-table th:nth-child(21) { width: 150px; min-width: 130px; }
+.data-table td {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.editableinput {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  padding: 4px 6px;
+  height: 28px;
+  background: transparent;
+  transition: border-color 0.3s ease;
+}
+.editableinput:focus {
+  border-color: #1f1e1e;
+  outline: none;
+  background: #e9f0ff;
+}
+tr.critical {
+  background-color: #ffd2d2;
+  font-weight: bold;
+}
+/* Order Management System styles */
+#oms {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: linear-gradient(#fff, #e6e6e6 90%);
+  color: #222;
+  padding: 0;
+}
+
+/* Top horizontal button bar */
+#oms .top-bar-btn-row {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0 5px 0;
+}
+
+#oms .top-bar-btn-row button {
+  background-color: #bbb;
+  color: black;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#oms .top-bar-btn-row button:hover,
+#oms .top-bar-btn-row button.active {
+  background-color: #e77517;
+  color: #fff;
+}
+
+
+/* Search/filter row bar styling to match button bar */
+#oms .search-bar-row,
+#oms .filter-bar-row {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  margin: 22px 0 10px 0;
+}
+#oms .search-bar-row input,
+#oms .search-bar-row select,
+#oms .filter-bar-row input,
+#oms .filter-bar-row select {
+  padding: 16px 32px;
+  font-size: 1.2em;
+  border-radius: 12px;
+  border: 1px solid #bbb;
+  font-weight: 500;
+  outline: none;
+  background: #f7f7f7;
+  width: 300px;
+  box-sizing: border-box;
+  margin-right: 8px;
+  transition: border-color 0.3s;
+}
+#oms .search-bar-row input:focus,
+#oms .filter-bar-row input:focus {
+  border-color: #0078d4;
+}
+#oms .search-bar-row button,
+#oms .filter-bar-row button {
+  background-color: #bbb;
+  color: black;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#oms .search-bar-row button:hover,
+#oms .filter-bar-row button:hover {
+  background-color: #e77517;
+  color: #fff;
+}
+
+/* Main content/table */
+#oms #main,
+#oms main {
+  padding: 0 30px 30px 30px;
+  background: transparent;
+  width: 100%;
+}
+
+#oms h1 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #222;
+  letter-spacing: 0.04em;
+}
+
+#oms #all-orders {
+  background: #fff;
+  box-shadow: 0 0 8px rgba(0,0,0,0.08);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+#oms table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.97em;
+  background: #fff;
+}
+
+#oms th,
+#oms td {
+  border: 1px solid #ddd;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+#oms th {
+  background-color: #e77517;
+  color: black;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+#oms tr:hover {
+  background-color: #f9f5ea;
+}
+
+#oms .status-paid {
+  color: green;
+  font-weight: bold;
+}
+
+#oms .status-pending {
+  color: orange;
+  font-weight: bold;
+}
+
+#oms .btn-small {
+  padding: 5px 13px;
+  font-size: 0.93em;
+  margin-left: 6px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 600;
+}
+#oms .btn-invoice {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+}
+#oms .btn-delete {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+}
+
+/* Forms and modals styling */
+#oms form {
+  max-width: 470px;
+  background: #fff;
+  padding: 24px 32px 18px 32px;
+  border-radius: 7px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  margin: 28px auto 0 auto;
+  text-align: center;
+}
+
+#oms label {
+  display: block;
+  margin: 13px 0 4px 0;
+  font-weight: bold;
+  text-align: left;
+  color: #333;
+}
+
+#oms input[type="text"],
+#oms input[type="number"],
+#oms input[type="tel"],
+#oms select {
+  width: 100%;
+  padding: 9px 10px;
+  box-sizing: border-box;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  transition: border-color 0.3s;
+}
+#oms input[type="text"]:focus,
+#oms input[type="number"]:focus,
+#oms input[type="tel"]:focus,
+#oms select:focus {
+  border-color: #0078d4;
+  outline: none;
+}
+
+#oms button[type="submit"] {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  margin-top: 17px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+#oms button[type="submit"]:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
+}
+
+/* Modal Styles */
+#oms #invoiceModal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.15);
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#oms #invoiceContent {
+  background: #fff;
+  border-radius: 8px;
+  padding: 32px;
+  min-width: 350px;
+  max-width: 480px;
+  margin: auto;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#oms #invoiceClose {
+  position: absolute;
+  top: 8px;
+  right: 18px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #222;
+  font-weight: bold;
+  border: none;
+  background: none;
+}
+
+#oms #downloadInvoiceBtn {
+  margin-top: 20px;
+  background-color: #0078d4;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  display: block;
+  transition: background-color 0.3s;
+}
+#oms #downloadInvoiceBtn:hover {
+  background-color: #005fa3;
+}
+
+/* Hide sections when needed */
+#oms .content-section[hidden] { display: none !important; }
+
+/* Responsive adjustment for smaller screens */
+@media (max-width: 850px) {
+  #oms table th, #oms table td { font-size: 0.97em; padding: 6px 6px; }
+  #oms .top-bar-btn-row button { font-size:1em; padding:11px 10px; }
+  #oms .search-bar-row input,
+  #oms .filter-bar-row input,
+  #oms .search-bar-row button,
+  #oms .filter-bar-row button { padding:10px 10px; font-size:1em; width:140px; }
+}
+
+@media (max-width: 600px) {
+  #oms #main, #oms main { padding: 0 6px 24px 6px; }
+  #oms .top-bar-btn-row { gap: 8px; flex-wrap: wrap;}
+  #oms .search-bar-row, #oms .filter-bar-row { gap: 8px; flex-wrap: wrap;}
+  #oms table { font-size: 0.87em;}
+}
+
+
+.hero,
+#login-container,
+#dashboard-container,
+.section-wrap {
+  margin-top: 120px;  /* push content below the 105px header */
+}
+  </style>
+</head>
+<body class="show-headerfooter">
+  <!-- ================= FRONT PAGE SECTION ================= -->
+  <div id="frontpage-section">
+    <header class="header-bar" id="main-header" role="banner">
+      <div class="brand-left" aria-label="Brand">
+        <img src="logo.jpg" alt="Design.py Logo" style="width:195px; height:157px; margin-left:auto; transform: scale(0.7); transform-origin: center;">
+      </div>
+      <nav class="top-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="#home" id="nav-home">Home</a></li>
+          <li><a href="#aboutus" id="nav-about">About Us</a></li>
+          <li><a href="#features" id="nav-features">Features</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div id="frontpage-container">
+      <section id="view-home" class="view active" aria-labelledby="homeTitle">
+        <div class="hero">
+          <h1 id="homeTitle">SUPERCHARGE YOUR MEP<br>PROJECTS WITH AI PRECISION</h1>
+          <p class="tag">Get MEP standards answers in seconds. Save time, avoid errors, and keep projects on track with AI-powered guidance.</p>
+          <!-- Updated button to call goToLogin -->
+          <button class="btn" onclick="goToLogin()">GET STARTED</button>
+        </div>
+      </section>
+      <section id="view-features" class="view" aria-labelledby="featuresTitle">
+        <div class="section-wrap">
+          <h2 id="featuresTitle">Features:</h2>
+          <ul>
+            <li>Ask building code and MEP questions – get answers sourced from official standards.</li>
+            <li>Supported standards: NBC, IS Codes, IEC, NFPA, ASHRAE, and more.</li>
+            <li>Every response cites the relevant clause, page, and table.</li>
+            <li>No uploads or registration needed — just chat and get answers instantly.</li>
+          </ul>
+        </div>
+      </section>
+      <section id="view-aboutus" class="view" aria-labelledby="aboutTitle">
+        <div class="section-wrap">
+          <h2 id="aboutTitle">About Us:</h2>
+          <ul>
+            <li>RNEW Consulting Engineers is an advanced consulting engineering firm based in Bengaluru, Karnataka.</li>
+            <li>We specialize in mechanical, electrical, and plumbing (MEP) solutions, sustainable building design, project management, and product development for all types of infrastructure.</li>
+            <li>Our team merges deep technical expertise with cutting-edge AI technologies to deliver tools like Designpy, giving engineers instant answers from Indian and international building standards.</li>
+            <li>Driven by quality, innovation, and client success, we serve businesses, architects, contractors, and professionals across India and beyond.</li>
+            <li>With every project, we aim to save time, reduce errors, and build smarter, more resilient environments.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+
+ <!-- ================= LOGIN SECTION ================= -->
+<div id="login-container" style="display:none;">
+  <div class="login-box">
+    <h2>Welcome</h2>
+    <p class="subtitle">Login to Designpy to continue to Designpy.</p>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+    <div class="divider">OR</div>
+    <button class="google-btn">Continue with Google</button>
+  </div>
+</div>
+
+  <!-- ================= DASHBOARD SECTION ================= -->
+ <!-- DASHBOARD PAGE -->
+<div id="dashboard-container">
+  <h1>Welcome to MEP Engineering AI Tools</h1>
+  <div class="tool-grid">
+    <!-- Chat Bot -->
+    <div class="tool-card" onclick="openTool('chatbot')">
+      <img src="botlogo1.jpg" alt="Chat Bot Logo" class="card-img" />
+    </div>
+    <!-- Duct Sizer -->
+    <div class="tool-card" onclick="openTool('duct')">
+      <img src="ductlogo.jpg" alt="AI duct sizing" class="card-img" />
+    </div>
+    <!-- Pipe Sizer -->
+    <div class="tool-card" onclick="openTool('pipe')">
+      <img src="pipe size.jpg" alt="AI pipe sizing" class="card-img" />
+    </div>
+    <!-- Cable Schedule Tool -->
+    <div class="tool-card" onclick="openTool('cableSchedule')">
+      <p>AI Cable Schedule Tool</p>
+    </div>
+    <!-- Order Management System -->
+    <div class="tool-card" onclick="openTool('oms')">
+      <p>Order Management System</p>
+    </div>
+  </div>
+</div>
+
+  <!-- ================= TOOL SECTIONS (placeholders) ================= -->
+  <div id="chatbot-section" style="display:none;"> <!-- Chatbot tool UI here -->
+    <button onclick="showSection('dashboard-section')">Back to Dashboard</button>
+    <!-- ...existing chatbot HTML... -->
+  </div>
+  <div id="duct-section" style="display:none;"> <!-- Duct tool UI here -->
+    <button onclick="showSection('dashboard-section')">Back to Dashboard</button>
+    <!-- ...existing duct tool HTML... -->
+  </div>
+  <div id="pipe-section" style="display:none;"> <!-- Pipe tool UI here -->
+    <button onclick="showSection('dashboard-section')">Back to Dashboard</button>
+    <!-- ...existing pipe tool HTML... -->
+  </div>
+  <div id="cable-section" style="display:none;"> <!-- Cable tool UI here -->
+    <button onclick="showSection('dashboard-section')">Back to Dashboard</button>
+    <!-- ...existing cable tool HTML... -->
+  </div>
+  <div id="oms-section" style="display:none;"> <!-- OMS tool UI here -->
+    <button onclick="showSection('dashboard-section')">Back to Dashboard</button>
+    <!-- ...existing OMS HTML... -->
+  </div>
+ 
+ <!-- CHAT PAGE -->
+<div id="app-container" style="display:none;">
+  <header>Welcome to MEPGuide AIBOT</header>
+  <div class="container">
+    <div class="chat-section" id="chatSection">
+      <div class="chat-box" id="chatBox">
+        <div class="bot-message">Welcome! Ask your question.</div>
+      </div>
+      <div class="input-area">
+        <input type="text" id="userInput" placeholder="Ask your question..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+    <div class="pdf-preview" id="pdfPreview">
+      <h3>PDF Preview</h3>
+      <p id="pdfFilename">No PDF selected</p>
+      <iframe
+        id="pdfViewer"
+        title="PDF Viewer"
+        style="width:100%; height:80vh; border:none;"
+      ></iframe>
+    </div>
+    <div class="sidebar">
+      <div class="dropdowns">
+        <label for="collectionDropdown">Select Collection</label>
+        <select id="collectionDropdown">
+          <option value="ALL">All Collections</option>
+        </select>
+        <label for="pdfDropdown">Standard PDFs</label>
+        <select id="pdfDropdown">
+          <option value="">Select a Standard PDF</option>
+        </select>
+        <button class="home-button" onclick="showPage('dashboard-container')">⌂</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI Duct Sizing Tool -->
+<section id="ductTool" aria-label="AI duct sizing tool" style="display:none;">
+  <h2>AI Duct Sizing Tool</h2>
+  <div class="actions" role="region" aria-label="Duct sizing actions">
+    <input type="file" id="fileUpload" accept=".xls,.xlsx,.csv,.pdf,image/*" style="display:none" onchange="uploadFile()" />
+    <label for="fileUpload" role="button" tabindex="0" aria-controls="ductTable">Upload File</label>
+    <button type="button" onclick="downloadExcel()">Download Excel</button>
+    <button type="button" onclick="downloadPdf()">Download PDF</button>
+    <button id="toggleMergeBtn" type="button" onclick="toggleMerge()" style="background: #000000;">Enable Merge</button>
+    <button id="toggleDeleteBtn" type="button" onclick="toggleDelete()" style="background: #000000;">Delete Rows</button>
+    <button type="button" onclick="addNewDuctRow()" style="background: #000000;">+ Add Row</button>
+    <button type="button" onclick="addNewPage()" style="background: #007bff; color: #fff; margin-left: 8px;">+ Add New Page</button>
+    <button type="button" onclick="backToDashboard()">Back to Dashboard</button>
+  </div>
+  <div class="table-container" id="ductTable">
+    <table class="data-table resizable-table" aria-describedby="ductToolDesc">
+      <thead>
+        <tr>
+          <th>Sl. No</th>
+          <th class="tagname-col">Tag name</th>
+          <th>Type fitting</th>
+          <th>Fitting no</th>
+          <th>Flow rate, m3/hr</th>
+          <th>Length, M/No</th>
+          <th>Nom. dia, mm</th>
+          <th>Duct height, mm</th>
+          <th>Duct width, mm</th>
+          <th>Eq dia, mm</th>
+          <th>Aspect ratio</th>
+          <th>Roughness in duct</th>
+          <th>Reynolds number in duct</th>
+          <th>Duct friction co-eff</th>
+          <th>Fitting K factor PDCF</th>
+          <th>Face velocity, m/s</th>
+          <th class="highlight">Pressure drop, Pa/m</th>
+          <th>Pressure drop, Pa</th>
+          <th>Mark critical path c</th>
+        </tr>
+      </thead>
+      <tbody id="ductTableBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- AI Pipe Sizing Tool Section -->
+<section id="pipeSizerTool" aria-label="AI Pipe Sizer Tool" style="display:none;">
+  <h2>AI Pipe Sizer Tool</h2>
+  <div class="actions" role="region" aria-label="Pipe sizer actions">
+    <input type="file" id="fileUploadPipe" accept=".xls,.xlsx,.csv,.pdf" style="display:none" />
+    <label for="fileUploadPipe" role="button" tabindex="0" aria-controls="pipeTable">Upload File</label>
+    <button type="button" id="addPipeRowBtn" onclick="addNewPipeRow()">+ Add Row</button>
+    <button type="button" id="downloadExcelBtn">Download Excel</button>
+    <button type="button" id="downloadPdfBtn">Download PDF</button>
+    <button type="button" id="backToDashboardBtn">Back to Dashboard</button>
+  </div>
+  <div class="table-container" id="pipeTable">
+    <table class="data-table" aria-describedby="pipeSizerToolDesc" role="grid">
+      <thead>
+        <tr>
+          <th>Tag name</th>
+          <th>Fitting no</th>
+          <th>Flow rate (m3/hr)*</th>
+          <th>Length (m/no)</th>
+          <th>Nom. dia (mm)*</th>
+          <th>Pipe outer dia (mm)</th>
+          <th>Pipe thickness (mm)</th>
+          <th>Pipe inner dia (mm)</th>
+          <th>Pipe code</th>
+          <th>Roughness in pipe</th>
+          <th>Reynolds number</th>
+          <th>Pipe friction co-eff</th>
+          <th>Fitting K factor</th>
+          <th>Velocity in pipe (m/s)</th>
+          <th>Pressure drop Pa/m</th>
+          <th>Pressure drop (Pa)</th>
+          <th>Mark Critical path as C</th>
+        </tr>
+      </thead>
+      <tbody id="pipeTableBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- AI Cable Schedule Tool Section -->
+<section id="cableScheduleTool" aria-label="AI cable schedule tool" style="display:none;">
+  <h2>AI Cable Schedule Tool</h2>
+  <div class="actions" role="region" aria-label="Cable schedule actions">
+    <input type="file" id="fileUpload" accept=".xls,.xlsx,.csv,.pdf" style="display:none" onchange="uploadFile()" />
+    <label for="fileUpload" role="button" tabindex="0" aria-controls="cableTable">Upload File</label>
+    <button type="button" onclick="downloadExcel()">Download Excel</button>
+    <button type="button" onclick="downloadPdf()">Download PDF</button>
+    <button id="toggleDeleteBtn" type="button" onclick="toggleDelete()" style="background: #000000;">Delete Rows</button>
+    <button type="button" onclick="addNewCableRow()" style="background: #000000;">+ Add Row</button>
+    <button type="button" onclick="addNewPage()" style="background: #007bff; color: #fff; margin-left: 8px;">+ Add New Page</button>
+    <button type="button" id="backToDashboardBtn">Back to Dashboard</button>
+  </div>
+  <div class="table-container" id="cableTable">
+    <table class="data-table" aria-describedby="cableScheduleToolDesc" role="grid">
+      <thead>
+        <tr>
+          <th>Sl. No</th>
+          <th>DB Name / Panel</th>
+          <th>Circuit Name / Tag</th>
+          <th>Load Type</th>
+          <th>Load Rating (kW/A)</th>
+          <th>Cable Length (m)</th>
+          <th>Cable Size (mm²)</th>
+          <th>Number of Cores</th>
+          <th>Cable Type</th>
+          <th>Conductor Material</th>
+          <th>Voltage (V)</th>
+          <th>Power Factor</th>
+          <th>Installation Type</th>
+          <th>Ambient Temp (°C)</th>
+          <th>Grouping / Derating</th>
+          <th>Calculated Current (A)</th>
+          <th>Voltage Drop (%)</th>
+          <th>Cable Tray Size Required</th>
+          <th>Termination / Glanding</th>
+          <th>Status</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody id="cableTableBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Order Management System Section -->
+<section id="oms" aria-label="Order Management System" style="display:none;">
+  <!-- Top Button Row -->
+  <div class="top-bar-btn-row">
+    <button id="btn-create-order">Create New Order</button>
+    <button id="btn-update-stage">Update Project</button>
+    <button id="btn-update-payment">Update Payment</button>
+    <button id="btn-search-orders">Search Orders</button>
+    <button id="btn-filter-remaining">Filters</button>
+    <button id="btn-back-dashboard">Back to Dashboard</button>
+  </div>
+
+  <main id="main" role="main">
+    <!-- Orders Table Section -->
+    <section id="section-orders" class="content-section active" tabindex="0">
+      <div id="all-orders">
+        <table>
+          <thead>
+            <tr>
+              <th>SL No</th>
+              <th>Order ID</th>
+              <th>Project Name</th>
+              <th>Client Name</th>
+              <th>Client Address</th>
+              <th>Client Phone</th>
+              <th>Client GST</th>
+              <th>Architect Name</th>
+              <th>Project Stage</th>
+              <th>Project Progress %</th>
+              <th>Project Remaining %</th>
+              <th>Total Amount</th>
+              <th>Amount Paid</th>
+              <th>Amount Paid %</th>
+              <th>Remaining Amount</th>
+              <th>Amount Unpaid %</th>
+              <th>Created Date</th>
+              <th>Last Invoice Date</th>
+              <th>End Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="orders-table-body">
+            <!-- Table rows inserted dynamically by JS -->
+          </tbody>
+        </table>
+        <div id="empty-orders-msg" style="text-align:center; color:#b63c00; margin-top:12px; display:none;">No orders found.</div>
+      </div>
+    </section>
+
+    <!-- Search Section -->
+    <section id="section-search" class="content-section" hidden>
+      <div class="center-search-container">
+        <form id="form-search-bar" autocomplete="off" style="display:flex; flex-direction:column; align-items:center; gap:14px;">
+          <input type="text" id="search_keyword"
+                 placeholder="Order ID, Project, Architect, Client, Address, Phone"
+                 autocomplete="off"
+                 style="width: 94%; padding: 15px 14px; font-size: 1.08em; border-radius: 7px; border: 2px solid #222; background: #fff;">
+          <button type="submit"
+                  style="background:#25a9ee; color:#fff; border:none; border-radius:14px; font-size:1.15em; font-weight:500; padding:10px 40px; cursor:pointer;">
+            Search
+          </button>
+        </form>
+      </div>
+      <div id="search-results" style="max-width:900px; margin: 18px auto 0 auto;"></div>
+    </section>
+
+    <!-- Filters Section -->
+    <section id="section-filter" class="content-section" hidden>
+      <h2 style="text-align:center;">Filter Orders</h2>
+      <div class="filter-bar-row">
+        <div class="custom-dropdown" id="filter-amount-dropdown">
+          <button id="dropdownAmountToggle" class="dropdown-btn">
+            Remaining Amount % Range: <span class="dropdown-arrow">&#x25BC;</span>
+          </button>
+          <div class="dropdown-options" id="dropdownAmountOptions">
+            <div class="dropdown-option" data-min="0" data-max="10">0-10%</div>
+            <div class="dropdown-option" data-min="11" data-max="20">11-20%</div>
+            <div class="dropdown-option" data-min="21" data-max="30">21-30%</div>
+            <div class="dropdown-option" data-min="31" data-max="40">31-40%</div>
+            <div class="dropdown-option" data-min="41" data-max="50">41-50%</div>
+            <div class="dropdown-option" data-min="51" data-max="60">51-60%</div>
+            <div class="dropdown-option" data-min="61" data-max="70">61-70%</div>
+            <div class="dropdown-option" data-min="71" data-max="80">71-80%</div>
+            <div class="dropdown-option" data-min="81" data-max="90">81-90%</div>
+            <div class="dropdown-option" data-min="91" data-max="100">91-100%</div>
+          </div>
+        </div>
+        <div class="custom-dropdown" id="filter-project-dropdown">
+          <button id="dropdownProjectToggle" class="dropdown-btn">
+            Project Remaining % Range: <span class="dropdown-arrow">&#x25BC;</span>
+          </button>
+          <div class="dropdown-options" id="dropdownProjectOptions">
+            <div class="dropdown-option" data-min="0" data-max="10">0-10%</div>
+            <div class="dropdown-option" data-min="11" data-max="20">11-20%</div>
+            <div class="dropdown-option" data-min="21" data-max="30">21-30%</div>
+            <div class="dropdown-option" data-min="31" data-max="40">31-40%</div>
+            <div class="dropdown-option" data-min="41" data-max="50">41-50%</div>
+            <div class="dropdown-option" data-min="51" data-max="60">51-60%</div>
+            <div class="dropdown-option" data-min="61" data-max="70">61-70%</div>
+            <div class="dropdown-option" data-min="71" data-max="80">71-80%</div>
+            <div class="dropdown-option" data-min="81" data-max="90">81-90%</div>
+            <div class="dropdown-option" data-min="91" data-max="100">91-100%</div>
+          </div>
+        </div>
+        <button type="button" id="btn-filter">Filter</button>
+      </div>
+      <div id="filter-results"></div>
+    </section>
+
+    <!-- Create Order Form -->
+    <section id="section-create-order" class="content-section" hidden>
+      <form id="form-create-order" autocomplete="off">
+        <label for="project_name">Project Name</label>
+        <input id="project_name" name="project_name" type="text" required />
+
+        <label for="architect_name">Architect Name</label>
+        <input id="architect_name" name="architect_name" type="text" required />
+
+        <label for="client_name">Client Name</label>
+        <input id="client_name" name="client_name" type="text" />
+
+        <label for="client_phone">Client Phone</label>
+        <input id="client_phone" name="client_phone" type="tel" />
+
+        <label for="client_gst">Client GST Number</label>
+        <input id="client_gst" name="client_gst" type="text" />
+
+        <label for="client_address">Client Address</label>
+        <input id="client_address" name="client_address" type="text" />
+
+        <label for="total_amount">Total Amount</label>
+        <input id="total_amount" name="total_amount" type="number" min="0" step="0.01" required />
+
+        <label for="amount_paid">Amount Paid</label>
+        <input id="amount_paid" name="amount_paid" type="number" min="0" step="0.01" required />
+
+        <button type="submit">Create Order</button>
+      </form>
+      <div id="create-msg" aria-live="polite" role="alert"></div>
+    </section>
+
+    <!-- Update Project Stage Form -->
+    <section id="section-update-stage" class="content-section" hidden>
+      <form id="form-update-stage" autocomplete="off">
+        <label for="upd_stage_order_id">Order ID</label>
+        <input id="upd_stage_order_id" name="upd_stage_order_id" type="text" required />
+
+        <label for="upd_stage">Project Stage</label>
+        <select id="upd_stage" name="upd_stage" required>
+            <option value="0">Design Review</option>
+            <option value="1">Concept MEP Design</option>
+            <option value="2">Detailed Design & Drawings</option>
+            <option value="3">Coordination & Clash Resolution</option>
+            <option value="4">Approvals</option>
+            <option value="5">Procurement</option>
+            <option value="6">Installation/Execution</option>
+            <option value="7">Testing & Commissioning</option>
+            <option value="8">Handover</option>
+        </select>
+
+        <button type="submit">Update Stage</button>
+      </form>
+      <div id="update-stage-msg" aria-live="polite" role="alert"></div>
+    </section>
+
+    <!-- Update Payment Form -->
+    <section id="section-update-payment" class="content-section" hidden>
+      <form id="form-update-payment" autocomplete="off">
+        <label for="upd_order_id">Order ID</label>
+        <input id="upd_order_id" name="upd_order_id" type="text" required />
+
+        <label for="upd_amount_paid">Amount Paid</label>
+        <input id="upd_amount_paid" name="upd_amount_paid" type="number" min="0" step="0.01" required />
+
+        <button type="submit">Update Payment</button>
+      </form>
+      <div id="update-payment-msg" aria-live="polite" role="alert"></div>
+    </section>
+
+    <!-- Invoice Modal -->
+    <div id="invoiceModal" role="dialog" aria-modal="true" aria-labelledby="invoiceTitle" tabindex="-1">
+      <div id="invoiceContent">
+        <button id="invoiceClose" onclick="closeInvoiceModal()" aria-label="Close Invoice Modal">×</button>
+        <h2 id="invoiceTitle">Invoice Details</h2>
+        <div id="invoiceFields"></div>
+        <button id="downloadInvoiceBtn" onclick="downloadInvoicePDF()">Download PDF</button>
+      </div>
+    </div>
+  </main>
+</section>
+
+
+  <!-- FOOTER (Only on frontpage) -->
+  <footer class="site-footer" id="site-footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <ul>
+          <li><a href="#home" id="ftr-home">Home</a></li>
+          <li><a href="#aboutus" id="ftr-about">About Us</a></li>
+          <li><a href="#features" id="ftr-features">Features</a></li>
+        </ul>
+      </div>
+     <div class="footer-col footer-mid">
+  <strong>Designpy provided by R<span class="orange">E</span>NEW Consulting Engineers</strong>
+  <div>
+    We are a consulting engineering company providing innovative and sustainable
+    solutions for buildings, infrastructure, and product development.
+  </div>
+  <div class="footer-social" aria-label="Social media">
+    <a class="yt" href="https://www.youtube.com/@Renew_consulting" target="_blank" rel="noopener" aria-label="YouTube">
+      <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+        <rect width="24" height="24" rx="6" fill="#CC181E"></rect>
+        <path d="M16.8 8.8c-.2-.7-.8-1.3-1.4-1.4C14.3 7 12 7 12 7s-2.3 0-3.4.3c-.7.2-1.2.8-1.4 1.4C7 9.9 7 12 7 12s0 2.1.2 3.2c.2.7.8 1.3 1.4 1.4 1.1.3 3.4.3 3.4.3s2.3 0 3.4-.3c.7-.2 1.2-.8 1.4-1.4.2-1.1.2-3.2.2-3.2s0-2.1-.2-3.2zM10.5 14.2V9.8L14.4 12l-3.9 2.2z" fill="#fff"/>
+      </svg>
+    </a>
+    <a class="li" href="https://www.linkedin.com/company/renew-consulting-engineers-private-limited/" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+        <rect width="24" height="24" rx="6" fill="#0077B5"></rect>
+        <path d="M6.95 9h2.1v7h-2.1V9zm1.05-3c.7 0 1.05.46 1.05 1.06C9.05 7.54 8.7 8 7.95 8c-.69 0-1.05-.46-1.05-1.06C6.9 6.46 7.25 6 7.95 6zm9.05 4.8v5.2h-2.1v-4.62c0-1.33-.56-1.98-1.47-1.98-.96 0-1.48.65-1.48 1.98V16h-2.08v-7h2.08v.9c.33-.52 1.09-1.26 2.25-1.26 1.59 0 2.8 1.01 2.8 3.16z" fill="#fff"/>
+      </svg>
+    </a>
+  </div>
+</div>
+      <div class="footer-col">
+        <strong>Contact</strong><br>
+        M/s Renew Consulting Engineers Pvt Ltd.<br>
+        Hallmark Building, Site no. 4C-315, 3rd floor,<br>
+        Banaswadi, Bengaluru-560043.<br>
+        <a href="mailto:renew@renewconsulting.in">renew@renewconsulting.in</a>
+      </div>
+    </div>
+    <div class="footer-copy">Copyright © Renew Consulting Engineers Pvt Ltd</div>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+<script>
+/// ---- ELEMENT REFERENCES ----
+let loggedIn = false;
+
+const footerEl = document.getElementById("site-footer");
+
+function updateFooterFor(pageId) {
+  if (!footerEl) return;
+  footerEl.classList.toggle("hidden", pageId !== "frontpage-container");
+}
+
+function setHeaderFooter(visible) {
+  if (visible) document.body.classList.add('show-headerfooter');
+  else document.body.classList.remove('show-headerfooter');
+}
+
+function showPage(pageId) {
+  const pages = ["frontpage-container", "login-container", "dashboard-container", "app-container"];
+  pages.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+
+  if (pageId === "frontpage-container") {
+    setHeaderFooter(true);
+    const frontPage = document.getElementById("frontpage-container");
+    if (frontPage) frontPage.style.display = "block";
+
+    ["view-home", "view-features", "view-aboutus"].forEach(viewId => {
+      const el = document.getElementById(viewId);
+      if (el) el.classList.toggle('active', viewId === 'view-home');
+    });
+  } else {
+    setHeaderFooter(false);
+    const pageEl = document.getElementById(pageId);
+    if (pageEl) {
+      if (pageId === "login-container") pageEl.style.display = "flex";
+      else if (pageId === "dashboard-container") pageEl.style.display = "block";
+      else if (pageId === "app-container") pageEl.style.display = "flex";
+    }
+  }
+  updateFooterFor(pageId);
+}
+
+function goToLogin() {
+  showPage("login-container");
+}
+
+(function initRouter() {
+  const VIEWS = {
+    home: document.getElementById('view-home'),
+    features: document.getElementById('view-features'),
+    aboutus: document.getElementById('view-aboutus')
+  };
+
+  function showOnly(key) {
+    Object.entries(VIEWS).forEach(([k, el]) => {
+      if (el) el.classList.toggle('active', k === key);
+    });
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  function route() {
+    if (document.body.classList.contains('show-headerfooter')) {
+      const h = (location.hash || '#home').toLowerCase();
+      if (h.includes('features')) return showOnly('features');
+      if (h.includes('aboutus')) return showOnly('aboutus');
+      return showOnly('home');
+    }
+  }
+
+  window.addEventListener('hashchange', route);
+  document.addEventListener('DOMContentLoaded', () => {
+    showPage('frontpage-container');
+    if (!location.hash) location.replace('#home');
+    route();
+
+    const getStartedBtn = document.getElementById("getStartedBtn");
+    if (getStartedBtn) {
+      getStartedBtn.addEventListener("click", e => {
+        e.preventDefault();
+        goToLogin();
+      });
+    }
+
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+      loginForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        await handleLogin();
+      });
+    }
+  });
+})();
+
+async function handleLogin() {
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  if (!usernameInput || !passwordInput) {
+    alert("Login form elements not found.");
+    return;
+  }
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value.trim();
+  if (!username || !password) {
+    alert("Please enter both username and password.");
+    return;
+  }
+  try {
+    const response = await fetch(`/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await response.json();
+    if (data.success) {
+      loggedIn = true;
+      showPage("dashboard-container");
+      const header = document.querySelector("#dashboard-container h1");
+      if (header) header.textContent = "Welcome to MEP Engineering AI Tools";
+    } else {
+      alert("Invalid username or password.");
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("Server error during login.");
+  }
+}
+
+function openTool(tool) {
+  console.log("openTool called with", tool);
+
+  if (!loggedIn) {
+    alert("Please login to access this tool.");
+    showPage("login-container");
+    return;
+  }
+
+
+
+  const containerIds = ['dashboard-container', 'app-container', 'ductTool', 'cableScheduleTool', 'pipeSizerTool', 'oms'];
+  containerIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  const homeBtn = document.querySelector('.home-button');
+  if (!homeBtn) {
+    console.warn("Home button not found");
+    return;
+  }
+
+  homeBtn.style.display = (tool === 'dashboard') ? 'none' : 'flex';
+
+  switch (tool) {
+    case 'chatbot':
+      const appContainer = document.getElementById('app-container');
+      if (appContainer) appContainer.style.display = 'flex';
+      if (typeof loadCollections === 'function') loadCollections();
+      if (typeof loadPDFs === 'function') loadPDFs();
+      break;
+    case 'duct':
+      const ductTool = document.getElementById('ductTool');
+      if (ductTool) ductTool.style.display = 'block';
+      if (!window.ductRows || ductRows.length === 0) window.ductRows = [createEmptyDuctRow(1)];
+      if (typeof renderDuctTable === 'function') renderDuctTable();
+      break;
+    case 'pipe':
+      const pipeTool = document.getElementById('pipeSizerTool');
+      if (pipeTool) pipeTool.style.display = 'block';
+      if (!window.pipeRows || pipeRows.length === 0) window.pipeRows = [createEmptyPipeRow()];
+      if (typeof renderPipeTable === 'function') renderPipeTable();
+      break;
+    case 'cableSchedule':
+      const cableTool = document.getElementById('cableScheduleTool');
+      if (cableTool) cableTool.style.display = 'block';
+      if (!window.cableRows || cableRows.length === 0) window.cableRows = [createEmptyCableRow(1)];
+      if (typeof renderCableTable === 'function') renderCableTable();
+      break;
+    case 'oms':
+      const orderTool = document.getElementById('oms');
+      if (orderTool) orderTool.style.display = 'flex';
+      if (typeof showSection === 'function') showSection('orders');
+      break;
+    case 'dashboard':
+      const dashboard = document.getElementById('dashboard-container');
+      if (dashboard) dashboard.style.display = 'block';
+      break;
+    default:
+      alert(`Tool '${tool}' is not implemented yet.`);
+      showDashboard();
+  }
+}
+
+function showDashboard() {
+  ['app-container', 'ductTool', 'cableScheduleTool', 'pipeSizerTool', 'oms'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const dashboard = document.getElementById('dashboard-container');
+  if (dashboard) dashboard.style.display = 'block';
+
+  const homeBtn = document.querySelector('.home-button');
+  if (homeBtn) homeBtn.style.display = 'none';
+
+  resetToolCardStates();
+}
+
+function resetToolCardStates() {
+  document.querySelectorAll(".tool-card").forEach(card => {
+    card.classList.remove("active");
+    card.classList.remove("hovered");
+  });
+}
+
+function initToolCardInteractions() {
+  document.querySelectorAll(".tool-card").forEach(card => {
+    card.addEventListener("mouseenter", () => {
+      if (!card.classList.contains("active")) {
+        card.classList.add("hovered");
+      }
+    });
+    card.addEventListener("mouseleave", () => {
+      card.classList.remove("hovered");
+    });
+    card.addEventListener("click", () => {
+      if (card.classList.contains("active")) {
+        card.classList.remove("active");
+      } else {
+        document.querySelectorAll(".tool-card.active").forEach(c => c.classList.remove("active"));
+        card.classList.add("active");
+        card.classList.remove("hovered");
+      }
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initToolCardInteractions);
+
+
+
+// ---- CHATBOT PAGE LOGIC ----
+document.addEventListener("DOMContentLoaded", () => {
+  // DOM references
+  const collectionDropdown = document.getElementById("collectionDropdown");
+  const pdfDropdown = document.getElementById("pdfDropdown");
+  const chatBox = document.getElementById("chatBox");
+  const userInput = document.getElementById("userInput");
+  const pdfPreview = document.getElementById("pdfPreview");
+  const pdfFilename = document.getElementById("pdfFilename");
+  const pdfViewer = document.getElementById("pdfViewer");
+
+  // ---- COLLECTIONS ----
+  async function loadCollections() {
+    if (!collectionDropdown) return;
+    try {
+      collectionDropdown.innerHTML = `<option value="ALL">All Collections</option>`;
+      const response = await fetch(`/api/list-collections`);
+      const data = await response.json();
+      if (data.collections) {
+        data.collections.forEach(name => {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          collectionDropdown.appendChild(option);
+        });
+      }
+    } catch (error) {
+      console.error("Error loading collections:", error);
+      collectionDropdown.innerHTML = `<option value="ALL">All Collections</option>`;
+    }
+  }
+
+  // ---- PDFs ----
+  async function loadPDFs() {
+    if (!pdfDropdown) return;
+    try {
+      pdfDropdown.innerHTML = `<option value="">Select a Standard PDF</option>`;
+      const response = await fetch(`/api/list-pdfs`);
+      const data = await response.json();
+      if (data.pdfs) {
+        data.pdfs.forEach(pdf => {
+          const option = document.createElement("option");
+          option.value = pdf;
+          option.textContent = pdf;
+          pdfDropdown.appendChild(option);
+        });
+      }
+    } catch (error) {
+      console.error("Error loading PDFs:", error);
+      pdfDropdown.innerHTML = `<option value="">Select a Standard PDF</option>`;
+    }
+  }
+
+  // ---- PDF PREVIEW ----
+  if (pdfDropdown) {
+    pdfDropdown.addEventListener("change", () => {
+      const selected = pdfDropdown.value;
+      if (selected) {
+        pdfPreview.classList.add("active");
+        pdfFilename.textContent = "Selected PDF: " + selected;
+        pdfViewer.src = `/pdfs/${selected}`;
+      } else {
+        pdfPreview.classList.remove("active");
+        pdfFilename.textContent = "No PDF selected";
+        pdfViewer.src = "";
+      }
+    });
+  }
+
+  // ---- CHAT ----
+  async function sendMessage() {
+    const message = userInput.value.trim();
+    const selectedCollection = collectionDropdown.value;
+    if (!message) return;
+    const userMsg = document.createElement("div");
+    userMsg.className = "user-message";
+    userMsg.innerHTML = `<strong>You:</strong> ${message}`;
+    chatBox.appendChild(userMsg);
+    const typingMsg = document.createElement("div");
+    typingMsg.className = "bot-message";
+    typingMsg.id = "typing";
+    typingMsg.innerHTML = `<em>Typing...</em>`;
+    chatBox.appendChild(typingMsg);
+    userInput.value = "";
+
+    const selectedCollections =
+      selectedCollection === "ALL"
+        ? Array.from(collectionDropdown.options).map(opt => opt.value).filter(val => val !== "ALL")
+        : [selectedCollection];
+
+    try {
+      const response = await fetch(`/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collection_id: selectedCollections,
+          query: message,
+          top_k: 5
+        })
+      });
+      const data = await response.json();
+      typingMsg.remove();
+      const botMsg = document.createElement("div");
+      botMsg.className = "bot-message";
+      botMsg.innerHTML = `${data.answer || "No response received."}`;
+      chatBox.appendChild(botMsg);
+    } catch (error) {
+      typingMsg.remove();
+      const errMsg = document.createElement("div");
+      errMsg.className = "bot-message";
+      errMsg.innerHTML = `Error: ${error.message}`;
+      chatBox.appendChild(errMsg);
+    }
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  // ---- ENTER KEY ----
+  if (userInput) {
+    userInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  }
+
+  // ---- INITIAL CHAT ROUTE ----
+  if (location.hash === "#chatbot") {
+    const dashboardContainer = document.getElementById("dashboard-container");
+    const appContainer = document.getElementById("app-container");
+    if (dashboardContainer) dashboardContainer.style.display = "none";
+    if (appContainer) appContainer.style.display = "flex";
+    loadCollections();
+    loadPDFs();
+  }
+
+  // ---- EXPOSE ----
+// Expose required functions globally for navigation, event handlers, and tool logic
+window.showPage = showPage;
+window.openTool = openTool;
+window.showDashboard = showDashboard;
+window.goToLogin = goToLogin;
+window.handleLogin = handleLogin;
+window.loadCollections = loadCollections;
+window.loadPDFs = loadPDFs;
+window.sendMessage = sendMessage;
+
+});
+
+
+// ==== Enhanced AI Duct Sizing Tool with Delete Rows Mode ====
+// --- DUCT SIZER TOOL LOGIC ---
+// ========== DUCT TOOL: VARS, CREATION, RENDER ==========
+function createEmptyDuctRow(index) {
+  return {
+    "Sl. No": index, "Tag name": "", "Type fitting": "", "Fitting no": "",
+    "Flow rate, m3/hr": "", "Length, M/No": 10, "Nom. dia, mm": 400,
+    "Duct height, mm": 150, "Duct width, mm": "", "Eq dia, mm": "",
+    "Aspect ratio": "", "Roughness in duct": "", "Reynolds number in duct": "",
+    "Duct friction co-eff": "", "Fitting K factor PDCF": "",
+    "Face velocity, m/s": "", "Pressure drop, Pa/m": "", "Pressure drop, Pa": "",
+    "Mark critical path c": "", merged: false, mergedFrom: null,
+    originalIndex: index, isManualEdit: false
+  };
+}
+let ductRows = [createEmptyDuctRow(1)];
+let ductMergeMode = false;
+let ductDeleteMode = false;
+let ductSelectedMergeRows = [];
+let ductSelectedDeleteRows = [];
+let ductOriginalRowsBackup = null;
+
+// ========== ADD/RENDER ROWS ==========
+function addNewDuctRow() {
+  ductRows.push(createEmptyDuctRow(ductRows.length + 1));
+  renderDuctTable();
+}
+function addNewPage() {
+  if (!confirm("Add new page? This will clear current data.")) return;
+  ductRows = [createEmptyDuctRow(1)];
+  ductMergeMode = false;
+  ductDeleteMode = false;
+  ductSelectedMergeRows = [];
+  ductSelectedDeleteRows = [];
+  ductOriginalRowsBackup = null;
+  renderDuctTable();
+}
+function renderDuctTable() {
+  const tbody = document.getElementById("ductTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (!ductRows.length) ductRows = [createEmptyDuctRow(1)];
+  ductRows.forEach((row, i) => {
+    tbody.insertAdjacentHTML(
+      "beforeend",
+      `<tr>
+        <td>${row["Sl. No"]}</td>
+        <td><input type="text" class="editableinput tagname-input" value="${row["Tag name"] || ""}" onchange="ductUpdateField(${i}, 'Tag name', this.value)" /></td>
+        <td><input type="text" class="editableinput" value="${row["Type fitting"] || ""}" onchange="ductUpdateField(${i}, 'Type fitting', this.value)" /></td>
+        <td>${row["Fitting no"] || ""}</td>
+        <td><input type="number" class="editableinput" min="0" step="any" value="${row["Flow rate, m3/hr"] || ""}" onchange="ductUpdateField(${i}, 'Flow rate, m3/hr', this.value)" /></td>
+        <td><input type="number" class="editableinput" min="0" step="0.1" value="${row["Length, M/No"] || ""}" onchange="ductUpdateField(${i}, 'Length, M/No', this.value)" /></td>
+        <td><input type="number" class="editableinput" min="0" value="${row["Nom. dia, mm"] || ""}" onchange="ductUpdateField(${i}, 'Nom. dia, mm', this.value)" /></td>
+        <td><input type="number" class="editableinput" min="0" value="${row["Duct height, mm"] || ""}" onchange="ductUpdateField(${i}, 'Duct height, mm', this.value)" /></td>
+        <td>${row["Duct width, mm"] || ""}</td>
+        <td>${row["Eq dia, mm"] || ""}</td>
+        <td>${row["Aspect ratio"] || ""}</td>
+        <td>${row["Roughness in duct"] || ""}</td>
+        <td>${row["Reynolds number in duct"] || ""}</td>
+        <td>${row["Duct friction co-eff"] || ""}</td>
+        <td>${row["Fitting K factor PDCF"] || ""}</td>
+        <td>${row["Face velocity, m/s"] || ""}</td>
+        <td>${row["Pressure drop, Pa/m"] || ""}</td>
+        <td>${row["Pressure drop, Pa"] || ""}</td>
+        <td>${row["Mark critical path c"] || ""}</td>
+      </tr>`
+    );
+  });
+}
+document.addEventListener("DOMContentLoaded", renderDuctTable);
+
+function ductUpdateField(index, field, value) {
+  ductRows[index][field] = value;
+  renderDuctTable();
+}
+
+// ========== MERGE/DELETE MODES (TEMPLATE—add if needed) ==========
+function toggleMerge() {
+  alert("Merge mode logic is not implemented in this basic block."); // You can insert real logic here.
+}
+function toggleDelete() {
+  alert("Delete mode logic is not implemented in this basic block."); // For basic UI, this triggers only an alert.
+}
+
+// ========== UPLOAD/DOWNLOAD ==========
+async function uploadFile() {
+  const input = document.getElementById("fileUpload");
+  if (!input.files.length) { alert("Please select a file."); return; }
+  const file = input.files[0];
+  const formData = new FormData();
+  formData.append("file", file);
+  try {
+    const response = await fetch("/api/duct/upload_file", { method: "POST", body: formData });
+    const result = await response.json();
+    if (result.error) { alert("Upload error: " + result.error); return; }
+    if (result.results && Array.isArray(result.results)) {
+      ductRows = result.results.map((row, idx) => ({ ...createEmptyDuctRow(idx + 1), ...row, "Sl. No": idx + 1 }));
+      renderDuctTable();
+      alert("File uploaded and calculated!");
+    } else {
+      alert("Upload succeeded but no data parsed.");
+      ductRows = [createEmptyDuctRow(1)];
+      renderDuctTable();
+    }
+  } catch (err) {
+    alert("Failed to upload/process file.");
+    console.error(err);
+  }
+}
+function downloadExcel() {
+  if (typeof XLSX === "undefined") { alert("SheetJS/XLSX library not loaded!"); return; }
+  const cleanRows = ductRows.filter(row => row["Tag name"] && row["Flow rate, m3/hr"]);
+  const worksheet = XLSX.utils.json_to_sheet(cleanRows);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "DuctSizing");
+  XLSX.writeFile(workbook, "duct_sizing_results.xlsx");
+}
+function downloadPdf() {
+  if (typeof window.jspdf === "undefined") { alert("jsPDF not loaded!"); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF("l", "mm", "a4");
+  const columns = ["Sl. No", "Tag name", "Type fitting", "Flow rate, m3/hr", "Length, M/No", "Nom. dia, mm", "Duct height, mm", "Duct width, mm", "Face velocity, m/s", "Pressure drop, Pa/m", "Pressure drop, Pa"];
+  const rowsData = ductRows.map((r, index) => [
+    index + 1, r["Tag name"], r["Type fitting"], r["Flow rate, m3/hr"], r["Length, M/No"], r["Nom. dia, mm"], r["Duct height, mm"], r["Duct width, mm"], r["Face velocity, m/s"], r["Pressure drop, Pa/m"], r["Pressure drop, Pa"]
+  ]);
+  doc.autoTable({ startY: 20, head: [columns], body: rowsData, styles: { fontSize: 8 }, headStyles: { fillColor: "#eb8108", textColor: "#000000" } });
+  doc.save("duct_sizing_results.pdf");
+}
+// ========== NAVIGATION ==========
+function backToDashboard() {
+  document.getElementById("ductTool").style.display = "none";
+  if (document.getElementById("app-container"))
+    document.getElementById("app-container").style.display = "none";
+  if (document.getElementById("dashboard-container"))
+    document.getElementById("dashboard-container").style.display = "block";
+  const homeBtn = document.querySelector(".home-button");
+  if (homeBtn) homeBtn.style.display = "none";
+}
+
+// ========== GLOBAL EXPOSURES ==========
+window.addNewDuctRow = addNewDuctRow;
+window.toggleMerge = toggleMerge;
+window.toggleDelete = toggleDelete;
+window.uploadFile = uploadFile;
+window.downloadExcel = downloadExcel;
+window.downloadPdf = downloadPdf;
+window.backToDashboard = backToDashboard;
+window.addNewPage = addNewPage;
+window.ductUpdateField = ductUpdateField;
+
+
+
+// Pipe Sizing Tool Code
+// Pipe Tool Variables
+let pipeRows = [];
+
+// Create a new empty pipe row with default values
+function createEmptyPipeRow() {
+  return {
+    tag: "",
+    fitting_no: 1,
+    flow: "",
+    length: 10,
+    nom_dia: "",
+    pipe_outer_dia: "",
+    pipe_thickness: "",
+    pipe_inner_dia: "",
+    pipe_code: "",
+    roughness_pipe: "",
+    reynolds: "",
+    friction: "",
+    k_factor: "",
+    velocity: "",
+    pressure_drop_per_m: "",
+    pressure_drop_total: "",
+    critical: "",
+  };
+}
+
+// Render pipe rows in the table body
+function renderPipeTable() {
+  const tbody = document.getElementById("pipeTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (!pipeRows.length) pipeRows = [createEmptyPipeRow()];
+  pipeRows.forEach((row, i) => {
+    const tr = document.createElement("tr");
+    if (row.critical === "C") {
+      tr.classList.add("critical");
+    }
+    tr.innerHTML = `
+      <td><input type="text" class="editableinput" value="${row.tag}" oninput="updatePipeRow(${i}, 'tag', this.value)" /></td>
+      <td><input type="number" min="1" class="editableinput" value="${row.fitting_no}" oninput="updatePipeRow(${i}, 'fitting_no', this.value)" /></td>
+      <td><input type="number" class="editableinput" value="${row.flow}" oninput="updatePipeRow(${i}, 'flow', this.value)" required /></td>
+      <td><input type="number" class="editableinput" value="${row.length}" oninput="updatePipeRow(${i}, 'length', this.value)" /></td>
+      <td><input type="number" class="editableinput" value="${row.nom_dia}" oninput="updatePipeRow(${i}, 'nom_dia', this.value)" required /></td>
+      <td><input type="number" class="editableinput" value="${row.pipe_outer_dia}" oninput="updatePipeRow(${i}, 'pipe_outer_dia', this.value)" /></td>
+      <td><input type="number" class="editableinput" value="${row.pipe_thickness}" oninput="updatePipeRow(${i}, 'pipe_thickness', this.value)" /></td>
+      <td><input type="number" class="editableinput" value="${row.pipe_inner_dia}" oninput="updatePipeRow(${i}, 'pipe_inner_dia', this.value)" /></td>
+      <td><input type="text" class="editableinput" value="${row.pipe_code}" oninput="updatePipeRow(${i}, 'pipe_code', this.value)" /></td>
+      <td>${row.roughness_pipe || ""}</td>
+      <td>${row.reynolds || ""}</td>
+      <td>${row.friction || ""}</td>
+      <td>${row.k_factor || ""}</td>
+      <td>${row.velocity || ""}</td>
+      <td>${row.pressure_drop_per_m || ""}</td>
+      <td>${row.pressure_drop_total || ""}</td>
+      <td>${row.critical || ""}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Update a field’s value in a pipe row and optionally recalc
+function updatePipeRow(index, field, value) {
+  pipeRows[index][field] = ["fitting_no", "length", "flow", "nom_dia", "pipe_outer_dia", "pipe_thickness", "pipe_inner_dia"].includes(field)
+    ? parseFloat(value) || ""
+    : value;
+  autoCalculate();
+}
+
+// Add a new empty pipe row
+function addNewPipeRow() {
+  pipeRows.push(createEmptyPipeRow());
+  renderPipeTable();
+}
+
+// Calls API to fetch recalculated pipe properties
+async function autoCalculate() {
+  try {
+    const resp = await fetch('/api/pipe/calculate_pipes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pipeRows)
+    });
+    if (resp.ok) {
+      pipeRows = await resp.json();
+      renderPipeTable();
+    }
+  } catch (error) {
+    console.error("Error in autoCalculate:", error);
+  }
+}
+
+// File upload handler for bulk pipe data upload
+document.getElementById("fileUploadPipe").onchange = async function () {
+  const file = this.files[0];
+  const fd = new FormData();
+  fd.append('file', file);
+  try {
+    const resp = await fetch('/api/pipe/upload_file', { method: 'POST', body: fd });
+    if (resp.ok) {
+      const result = await resp.json();
+      if (result && result.results) {
+        pipeRows = result.results;
+        renderPipeTable();
+      }
+    }
+  } catch (error) {
+    console.error("Error uploading file:", error);
+  }
+};
+
+// Download pipe data as CSV
+document.getElementById("downloadExcelBtn").onclick = function () {
+  if (pipeRows.length === 0) {
+    alert('No data to download.');
+    return;
+  }
+  const headers = ["Tag name", "Fitting no", "Flow rate (m3/hr)", "Length (m/no)", "Nom. dia (mm)", "Pipe outer dia (mm)", "Pipe thickness (mm)", "Pipe inner dia (mm)", "Pipe code", "Roughness in pipe", "Reynolds number", "Pipe friction co-eff", "Fitting K factor", "Velocity in pipe (m/s)", "Pressure drop Pa/m", "Pressure drop (Pa)", "Mark Critical path as C"];
+  let csvContent = headers.join(",") + "\n";
+  pipeRows.forEach(row => {
+    const rowData = [
+      `"${row.tag || ''}"`, row.fitting_no || '', row.flow || '', row.length || '', row.nom_dia || '',
+      row.pipe_outer_dia || '', row.pipe_thickness || '', row.pipe_inner_dia || '', `"${row.pipe_code || ''}"`,
+      row.roughness_pipe || '', row.reynolds || '', row.friction || '', row.k_factor || '', row.velocity || '',
+      row.pressure_drop_per_m || '', row.pressure_drop_total || '', `"${row.critical || ''}"`
+    ];
+    csvContent += rowData.join(",") + "\n";
+  });
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "pipe_sizer_results.csv";
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  URL.revokeObjectURL(url);
+  a.remove();
+};
+
+// Download pipe data as PDF using jsPDF
+document.getElementById("downloadPdfBtn").onclick = async function () {
+  if (pipeRows.length === 0) {
+    alert('No data to download.');
+    return;
+  }
+  if (!window.jspdf) {
+    alert('Please include jsPDF library to enable PDF download.');
+    return;
+  }
+  const doc = new jspdf.jsPDF();
+  const headers = ["Tag name", "Fitting no", "Flow (m3/hr)", "Length (m)", "Nom. dia (mm)", "Pipe outer dia (mm)", "Pipe thickness (mm)", "Pipe inner dia (mm)", "Pipe code", "Roughness", "Reynolds", "Friction", "K factor", "Velocity", "Pressure Drop /m", "Pressure Drop Total", "Critical"];
+  const dataRows = pipeRows.map(row => [
+    row.tag || '',
+    row.fitting_no || '',
+    row.flow || '',
+    row.length || '',
+    row.nom_dia || '',
+    row.pipe_outer_dia || '',
+    row.pipe_thickness || '',
+    row.pipe_inner_dia || '',
+    row.pipe_code || '',
+    row.roughness_pipe || '',
+    row.reynolds || '',
+    row.friction || '',
+    row.k_factor || '',
+    row.velocity || '',
+    row.pressure_drop_per_m || '',
+    row.pressure_drop_total || '',
+    row.critical || ''
+  ]);
+  doc.text("Pipe Sizer Results", 14, 15);
+  doc.autoTable({ head: [headers], body: dataRows, startY: 20, styles: { fontSize: 7 }, headStyles: { fillColor: [243, 111, 24] } });
+  doc.save("pipe_sizer_results.pdf");
+};
+
+// Back to dashboard button handler
+document.getElementById("backToDashboardBtn").onclick = function () {
+  document.getElementById('pipeSizerTool').style.display = 'none';
+  document.getElementById('dashboard-container').style.display = 'block';
+};
+
+// Column resize handlers
+function initResize() {
+  let thElm, startOffset;
+  Array.prototype.forEach.call(document.querySelectorAll("#pipeSizerTool .data-table th"), function (th) {
+    th.style.position = 'relative';
+    th.addEventListener('mousedown', function (e) {
+      if (e.offsetX > th.offsetWidth - 10) {
+        thElm = th;
+        startOffset = th.offsetWidth - e.pageX;
+      }
+    });
+  });
+  document.addEventListener('mousemove', function (e) {
+    if (thElm) {
+      thElm.style.width = (startOffset + e.pageX) + "px";
+    }
+  });
+  document.addEventListener('mouseup', function () {
+    thElm = undefined;
+  });
+}
+
+// Initialize on DOM ready
+window.addEventListener('DOMContentLoaded', () => {
+  addNewPipeRow();
+  autoCalculate();
+  initResize();
+});
+
+// --- CABLE SCHEDULE TOOL LOGIC ---
+// Cable Tool Variables
+let cableRows = [];
+
+// Create a new empty cable row with default values
+function createEmptyCableRow(index = cableRows.length + 1) {
+  return {
+    "Sl. No": index,
+    "DB Name / Panel": "",
+    "Circuit Name / Tag": "",
+    "Load Type": "",
+    "Load Rating (kW/A)": "",
+    "Cable Length (m)": "",
+    "Cable Size (mm²)": "",
+    "Number of Cores": "",
+    "Cable Type": "",
+    "Conductor Material": "",
+    "Voltage (V)": "",
+    "Power Factor": 0.8,
+    "Installation Type": "",
+    "Ambient Temp (°C)": "",
+    "Grouping / Derating": "",
+    "Calculated Current (A)": "",
+    "Voltage Drop (%)": "",
+    "Cable Tray Size Required": "",
+    "Termination / Glanding": "",
+    "Status": "",
+    "Remarks": "",
+  };
+}
+
+// Add a new cable row and render
+function addNewCableRow() {
+  cableRows.push(createEmptyCableRow());
+  renderCableTable();
+}
+
+// Render cable rows in the table body
+function renderCableTable() {
+  const tbody = document.getElementById("cableTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (cableRows.length === 0) cableRows = [createEmptyCableRow()];
+  cableRows.forEach((row, i) => {
+    tbody.insertAdjacentHTML(
+      "beforeend",
+      `<tr>
+        <td>${row["Sl. No"]}</td>
+        <td><input class='editableinput' type='text' onchange='updateCableField(${i}, "DB Name / Panel", this.value)' value='${row["DB Name / Panel"]}'></td>
+        <td><input class='editableinput' type='text' onchange='updateCableField(${i}, "Circuit Name / Tag", this.value)' value='${row["Circuit Name / Tag"]}'></td>
+        <td><select class='editableinput' onchange='updateCableField(${i}, "Load Type", this.value)'>
+          <option value="">Select...</option>
+          <option value="Lighting"${row["Load Type"] === "Lighting" ? " selected" : ""}>Lighting</option>
+          <option value="Power"${row["Load Type"] === "Power" ? " selected" : ""}>Power</option>
+          <option value="HVAC"${row["Load Type"] === "HVAC" ? " selected" : ""}>HVAC</option>
+          <option value="Control"${row["Load Type"] === "Control" ? " selected" : ""}>Control</option>
+        </select></td>
+        <td><input class='editableinput' type='number' step='any' onchange='updateCableField(${i}, "Load Rating (kW/A)", this.value)' value='${row["Load Rating (kW/A)"]}'></td>
+        <td><input class='editableinput' type='number' step='any' onchange='updateCableField(${i}, "Cable Length (m)", this.value)' value='${row["Cable Length (m)"]}'></td>
+        <td><input class='editableinput' type='number' step='any' onchange='updateCableField(${i}, "Cable Size (mm²)", this.value)' value='${row["Cable Size (mm²)"]}'></td>
+        <td><input class='editableinput' type='number' onchange='updateCableField(${i}, "Number of Cores", this.value)' value='${row["Number of Cores"]}'></td>
+        <td><select class='editableinput' onchange='updateCableField(${i}, "Cable Type", this.value)'>
+          <option value="">Select...</option>
+          <option value="XLPE"${row["Cable Type"] === "XLPE" ? " selected" : ""}>XLPE</option>
+          <option value="PVC"${row["Cable Type"] === "PVC" ? " selected" : ""}>PVC</option>
+          <option value="Armoured"${row["Cable Type"] === "Armoured" ? " selected" : ""}>Armoured</option>
+        </select></td>
+        <td><select class='editableinput' onchange='updateCableField(${i}, "Conductor Material", this.value)'>
+          <option value="">Select...</option>
+          <option value="Copper"${row["Conductor Material"] === "Copper" ? " selected" : ""}>Copper</option>
+          <option value="Aluminum"${row["Conductor Material"] === "Aluminum" ? " selected" : ""}>Aluminum</option>
+        </select></td>
+        <td><input class='editableinput' type='number' step='any' onchange='updateCableField(${i}, "Voltage (V)", this.value)' value='${row["Voltage (V)"]}'></td>
+        <td><input class='editableinput' type='number' step='any' min='0' max='1' onchange='updateCableField(${i}, "Power Factor", this.value)' value='${row["Power Factor"]}'></td>
+        <td><select class='editableinput' onchange='updateCableField(${i}, "Installation Type", this.value)'>
+          <option value="">Select...</option>
+          <option value="Tray"${row["Installation Type"] === "Tray" ? " selected" : ""}>Tray</option>
+          <option value="Conduit"${row["Installation Type"] === "Conduit" ? " selected" : ""}>Conduit</option>
+          <option value="Buried"${row["Installation Type"] === "Buried" ? " selected" : ""}>Buried</option>
+          <option value="Duct"${row["Installation Type"] === "Duct" ? " selected" : ""}>Duct</option>
+        </select></td>
+        <td><input class='editableinput' type='number' step='any' onchange='updateCableField(${i}, "Ambient Temp (°C)", this.value)' value='${row["Ambient Temp (°C)"]}'></td>
+        <td><input class='editableinput' type='text' onchange='updateCableField(${i}, "Grouping / Derating", this.value)' value='${row["Grouping / Derating"]}'></td>
+        <td>${row["Calculated Current (A)"]}</td>
+        <td>${row["Voltage Drop (%)"]}</td>
+        <td><input class='editableinput' type='text' onchange='updateCableField(${i}, "Cable Tray Size Required", this.value)' value='${row["Cable Tray Size Required"]}'></td>
+        <td><input class='editableinput' type='text' onchange='updateCableField(${i}, "Termination / Glanding", this.value)' value='${row["Termination / Glanding"]}'></td>
+        <td><select class='editableinput' onchange='updateCableField(${i}, "Status", this.value)'>
+          <option value="">Select...</option>
+          <option value="Planned"${row["Status"] === "Planned" ? " selected" : ""}>Planned</option>
+          <option value="Installed"${row["Status"] === "Installed" ? " selected" : ""}>Installed</option>
+          <option value="Tested"${row["Status"] === "Tested" ? " selected" : ""}>Tested</option>
+          <option value="Commissioned"${row["Status"] === "Commissioned" ? " selected" : ""}>Commissioned</option>
+        </select></td>
+        <td><input class='editableinput' type='text' onchange='updateCableField(${i}, "Remarks", this.value)' value='${row["Remarks"]}'></td>
+      </tr>`
+    );
+  });
+}
+
+// Update specific cable row field and rerender table
+function updateCableField(index, field, value) {
+  cableRows[index][field] = value;
+  renderCableTable();
+}
+
+// Initialize cable table on DOM content load
+document.addEventListener('DOMContentLoaded', () => {
+  renderCableTable();
+});
+
+const CableScheduleColumnResizer = (function () {
+  let isResizing = false;
+  let currentResizeColumn = null;
+  let startX = 0;
+  let startWidth = 0;
+
+  function handleMouseDown(e) {
+    const rect = e.target.getBoundingClientRect();
+    if (e.clientX >= rect.right - 6) { // near right edge for resize
+      isResizing = true;
+      currentResizeColumn = e.target;
+      startX = e.clientX;
+      startWidth = parseInt(window.getComputedStyle(currentResizeColumn).width);
+      currentResizeColumn.classList.add('resizing');
+      const table = document.querySelector('#cableScheduleTool .data-table');
+      if (table) table.classList.add('resizing');
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+
+  function handleMouseMove(e) {
+    if (!isResizing || !currentResizeColumn) return;
+    const diff = e.clientX - startX;
+    const newWidth = Math.max(startWidth + diff, 50);
+    const headers = Array.from(currentResizeColumn.parentNode.children);
+    const colIndex = headers.indexOf(currentResizeColumn);
+    if (colIndex === -1) return;
+
+    // Resize header
+    currentResizeColumn.style.width = newWidth + "px";
+
+    // Resize each corresponding cell in tbody rows
+    const table = document.querySelector('#cableScheduleTool .data-table');
+    if (!table) return;
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      const cell = row.children[colIndex];
+      if (cell) cell.style.width = newWidth + "px";
+    });
+
+    e.preventDefault();
+  }
+
+  function handleMouseUp(e) {
+    if (isResizing) {
+      isResizing = false;
+      if (currentResizeColumn) {
+        currentResizeColumn.classList.remove('resizing');
+        currentResizeColumn = null;
+      }
+      const table = document.querySelector('#cableScheduleTool .data-table');
+      if (table) {
+        table.classList.remove('resizing');
+      }
+    }
+  }
+
+  function init() {
+    const table = document.querySelector('#cableScheduleTool .data-table');
+    if (!table) return;
+    const headers = table.querySelectorAll('th');
+    headers.forEach(header => {
+      header.style.position = 'relative';
+      header.addEventListener('mousedown', handleMouseDown);
+    });
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }
+
+  return { init };
+})();
+
+// Back to Dashboard button for cable schedule tool
+document.addEventListener('DOMContentLoaded', () => {
+  const btnBackDashboardCable = document.getElementById('btn-back-dashboard-cable');
+  if (btnBackDashboardCable) {
+    btnBackDashboardCable.addEventListener('click', () => {
+      const cableTool = document.getElementById('cableScheduleTool');
+      if (cableTool) cableTool.style.display = 'none';
+
+      const dashboard = document.getElementById('dashboard-container');
+      if (dashboard) dashboard.style.display = 'block';
+    });
+  }
+});
+
+// Initialize on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  CableScheduleColumnResizer.init();
+});
+
+// --- ORDER MANAGEMENT TOOL LOGIC ---
+// ----------- Constants and Section Handling -------
+const btnCreateOrder = document.getElementById('btn-create-order');
+const btnUpdatePayment = document.getElementById('btn-update-payment');
+const btnUpdateStage = document.getElementById('btn-update-stage');
+const btnOrders = document.getElementById('btn-orders');
+const btnSearchOrders = document.getElementById('btn-search-orders');
+const btnFilterRemaining = document.getElementById('btn-filter-remaining');
+const btnBackDashboard = document.getElementById('btn-back-dashboard');
+
+const sections = {
+  create: document.getElementById('section-create-order'),
+  updatePayment: document.getElementById('section-update-payment'),
+  updateStage: document.getElementById('section-update-stage'),
+  orders: document.getElementById('section-orders'),
+  search: document.getElementById('section-search'),
+  filter: document.getElementById('section-filter')
+};
+
+function showSection(name) {
+  Object.values(sections).forEach(sec => {
+    if (sec) {
+      sec.classList.remove('active');
+      sec.hidden = true;
+    }
+  });
+  if (sections[name]) {
+    sections[name].classList.add('active');
+    sections[name].hidden = false;
+    if(name === 'orders') loadAllOrders();
+  }
+}
+
+function activateButton(btn) {
+  [btnCreateOrder, btnUpdatePayment, btnUpdateStage, btnOrders, btnSearchOrders, btnFilterRemaining].forEach(b => {
+    if(b) b.classList.remove('active');
+  });
+  if(btn) btn.classList.add('active');
+}
+
+// ------------- Button Handlers ---------------
+btnCreateOrder?.addEventListener('click', () => { showSection('create'); activateButton(btnCreateOrder); });
+btnUpdatePayment?.addEventListener('click', () => { showSection('updatePayment'); activateButton(btnUpdatePayment); });
+btnUpdateStage?.addEventListener('click', () => { showSection('updateStage'); activateButton(btnUpdateStage); });
+btnOrders?.addEventListener('click', () => { showSection('orders'); activateButton(btnOrders); });
+btnSearchOrders?.addEventListener('click', () => { showSection('search'); activateButton(btnSearchOrders); });
+btnFilterRemaining?.addEventListener('click', () => { showSection('filter'); activateButton(btnFilterRemaining); });
+
+btnBackDashboard?.addEventListener('click', () => {
+  document.getElementById('oms').style.display = "none";
+  const dashboard = document.getElementById('dashboard-container');
+  if (dashboard) dashboard.style.display = 'block';
+});
+
+// ----------- Utility Formatting ---------
+function formatCurrency(val) {
+  if(typeof val !== "number" || isNaN(val)) return "₹0.00";
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(val);
+}
+function getStageName(idx) {
+  const stages = [
+    "Design Review", "Concept MEP Design", "Detailed Design & Drawings", "Coordination & Clash Resolution",
+    "Approvals", "Procurement", "Installation/Execution", "Testing & Commissioning", "Handover"
+  ];
+  return stages[idx] ?? "";
+}
+
+// --------- Table Rendering (matched columns) ----------
+function renderOrdersTable(orders, containerId, showActions=true) {
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  if(!orders.length){
+    container.innerHTML = "<p>No orders found.</p>";
+    return;
+  }
+  let html = `<table role="grid"><thead><tr>
+    <th>SL No</th><th>Order ID</th><th>Project Name</th><th>Client Name</th><th>Client Address</th>
+    <th>Client Phone</th><th>Client GST</th><th>Architect Name</th><th>Project Stage</th>
+    <th>Project Progress %</th><th>Project Remaining %</th><th>Total Amount</th>
+    <th>Amount Paid</th><th>Amount Paid %</th><th>Remaining Amount</th>
+    <th>Amount Unpaid %</th><th>Created Date</th>
+    <th>Last Invoice Date</th><th>End Date</th>${showActions ? "<th>Actions</th>" : ""}
+  </tr></thead><tbody>`;
+  orders.forEach((o, i) => {
+    html += `<tr>
+      <td>${i+1}</td>
+      <td>${o.id}</td>
+      <td>${o.project_name}</td>
+      <td>${o.client_name || ""}</td>
+      <td>${o.client_address || ""}</td>
+      <td>${o.client_phone || ""}</td>
+      <td>${o.client_gst || ""}</td>
+      <td>${o.architect_name || ""}</td>
+      <td>${o.progress_stage || getStageName(o.progress_stage_index)}</td>
+      <td>${(o.progress_percent || 0).toFixed(2)}%</td>
+      <td>${(o.remaining_percent || 0).toFixed(2)}%</td>
+      <td>${formatCurrency(o.total_amount)}</td>
+      <td>${formatCurrency(o.amount_paid)}</td>
+      <td>${(o.paid_percent || 0).toFixed(2)}%</td>
+      <td>${formatCurrency(o.remaining_amount)}</td>
+      <td>${(o.unpaid_percent || 0).toFixed(2)}%</td>
+      <td>${o.created_at || ""}</td>
+      <td>${o.last_invoice_date || ""}</td>
+      <td>${o.end_date || ""}</td>
+      ${showActions ? `<td>
+        <button onclick="viewInvoice('${o.id}')">Invoice</button>
+        <button onclick="deleteOrder('${o.id}')">Delete</button>
+      </td>` : ""}
+    </tr>`;
+  });
+  html += "</tbody></table>";
+  container.innerHTML = html;
+}
+
+async function loadAllOrders(){
+  try {
+    const resp = await fetch("/api/order/orders");
+    if(!resp.ok) throw new Error(await resp.text());
+    const orders = await resp.json();
+    renderOrdersTable(orders, "all-orders", true);
+  }catch(e){
+    document.getElementById("all-orders").innerHTML = `<p style="color:red;">${e.message}</p>`;
+  }
+}
+
+// ----------- Invoice Modal -----------
+async function viewInvoice(orderId){
+  try {
+    const resp = await fetch(`/api/order/orders/${orderId}/invoice_json`);
+    if(!resp.ok) throw new Error("Failed to load invoice");
+    const invoice = await resp.json();
+    let html = `
+      <h3>Invoice for Order ID: ${invoice.id}</h3>
+      <p>Project: ${invoice.project_name}</p>
+      <p>Client: ${invoice.client_name}</p>
+      <p>Phone: ${invoice.client_phone}</p>
+      <p>Address: ${invoice.client_address}</p>
+      <p>GST No: ${invoice.client_gst}</p>
+      <p>Progress: ${parseFloat(invoice.progress_percent).toFixed(2)}%</p>
+      <p>Total Amount: ₹${parseFloat(invoice.total_amount).toFixed(2)}</p>
+      <p>Amount Paid: ₹${parseFloat(invoice.amount_paid).toFixed(2)}</p>
+      <p>Remaining Amount: ₹${parseFloat(invoice.remaining_amount).toFixed(2)}</p>
+      <p>Payable Amount: ₹${parseFloat(invoice.draft_invoice_amount || 0).toFixed(2)}</p>
+    `;
+    document.getElementById("invoiceFields").innerHTML = html;
+    document.getElementById("invoiceModal").style.display = "flex";
+    window.currentInvoiceOrderId = orderId;
+  }catch(error){
+    alert(error.message);
+  }
+}
+
+function closeInvoiceModal(){ document.getElementById("invoiceModal").style.display="none"; }
+function downloadInvoicePDF(){ if(window.currentInvoiceOrderId) window.open(`/api/order/orders/${window.currentInvoiceOrderId}/invoice_pdf`, "_blank"); }
+
+async function deleteOrder(id){
+  if(!confirm(`Delete order ${id}? This action cannot be undone.`)) return;
+  try {
+    const resp = await fetch(`/api/order/orders/${id}/`, {method:"DELETE"});
+    if(!resp.ok) throw new Error(await resp.text());
+    alert(`Order ${id} deleted.`);
+    loadAllOrders();
+  }catch(error){ alert(`Delete failed: ${error.message}`); }
+}
+
+// ------------ CREATE/UPDATE Forms ------------
+document.getElementById("form-create-order")?.addEventListener("submit", async e => {
+  e.preventDefault();
+  const data = {
+    project_name: document.getElementById("project_name").value.trim(),
+    architect_name: document.getElementById("architect_name").value.trim(),
+    client_name: document.getElementById("client_name").value.trim(),
+    client_phone: document.getElementById("client_phone").value.trim(),
+    client_gst: document.getElementById("client_gst").value.trim(),
+    client_address: document.getElementById("client_address").value.trim(),
+    total_amount: Number(document.getElementById("total_amount").value),
+    amount_paid: Number(document.getElementById("amount_paid").value)
+  };
+
+  if(!data.project_name || !data.architect_name || data.total_amount<=0 || data.amount_paid<0){
+    alert("Please fill out required fields correctly.");
+    return;
+  }
+
+  try {
+    const resp = await fetch("/api/order/neworders", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    });
+    if(!resp.ok) throw new Error(await resp.text());
+    const order = await resp.json();
+    alert(`Order created with ID ${order.id}`);
+    e.target.reset();
+    showSection('orders');
+    activateButton(btnOrders);
+    loadAllOrders();
+  }catch(e){
+    alert("Failed to create order: " + e.message);
+  }
+});
+
+document.getElementById("form-update-payment")?.addEventListener("submit", async e => {
+  e.preventDefault();
+  const orderId = document.getElementById("upd_order_id").value.trim();
+  const amountPaid = Number(document.getElementById("upd_amount_paid").value);
+
+  if(!orderId){ alert("Order ID must be provided."); return; }
+  if(isNaN(amountPaid) || amountPaid<=0){ alert("Enter valid Payment Amount."); return; }
+
+  try {
+    const resp = await fetch(`/api/order/orders/${orderId}/`, {
+      method: "PUT",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({amount_paid: amountPaid})
+    });
+    if(!resp.ok) throw new Error(await resp.text());
+    const json = await resp.json();
+    const msgDiv = document.getElementById("update-payment-msg");
+    if(msgDiv){ msgDiv.textContent = `Order ${json.id} updated successfully.`; msgDiv.style.color = "green"; }
+  }catch(e){ alert("Update failed: " + e.message); }
+});
+
+document.getElementById("form-update-stage")?.addEventListener("submit", async e => {
+  e.preventDefault();
+  const orderId = document.getElementById("upd_stage_order_id").value.trim();
+  const stageIndex = Number(document.getElementById("upd_stage").value);
+
+  if(!orderId){ alert("Order ID must be provided."); return; }
+  if(isNaN(stageIndex) || stageIndex<0){ alert("Please select valid Project Stage."); return; }
+
+  try {
+    const resp = await fetch(`/api/order/orders/${orderId}/`, {
+      method:"PUT",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({progress_stage_index: stageIndex})
+    });
+    if(!resp.ok) throw new Error(await resp.text());
+    const json = await resp.json();
+    const msgDiv = document.getElementById("update-stage-msg");
+    if(msgDiv){
+      msgDiv.textContent = `Stage for Order ${json.id} updated to "${getStageName(json.progress_stage_index)}".`;
+      msgDiv.style.color="green";
+    }
+  }catch(e){ alert("Update failed: " + e.message); }
+});
+
+// ------------ Filtering and Search Logic! -------------
+document.getElementById("btn-filter")?.addEventListener("click", async () => {
+  // add UI controls for both filters and collect their values
+  const amtMin = Number(document.getElementById("filter_amount_min")?.value); // 0-100
+  const amtMax = Number(document.getElementById("filter_amount_max")?.value);
+  const projMin = Number(document.getElementById("filter_project_min")?.value);
+  const projMax = Number(document.getElementById("filter_project_max")?.value);
+  let url = `/api/order/orders/filter?`;
+
+  if(!isNaN(amtMin) && !isNaN(amtMax)) url += `remaining_amount_min=${amtMin}&remaining_amount_max=${amtMax}&`;
+  if(!isNaN(projMin) && !isNaN(projMax)) url += `project_percent_min=${projMin}&project_percent_max=${projMax}&`;
+
+  try {
+    const resp = await fetch(url);
+    if(!resp.ok) throw new Error(await resp.text());
+    const orders = await resp.json();
+    renderOrdersTable(orders, "filter-results", false);
+  }catch(e){
+    document.getElementById("filter-results").innerHTML = `<p style="color:red;">${e.message}</p>`;
+  }
+});
+
+document.getElementById("btn-search")?.addEventListener("click", async () => {
+  const searchVal = document.getElementById("search_keyword").value.trim();
+  if(!searchVal){ alert("Enter keyword to search."); return; }
+  try {
+    const resp = await fetch(`/api/order/orders/search?query=${encodeURIComponent(searchVal)}`);
+    if(!resp.ok) throw new Error(await resp.text());
+    const orders = await resp.json();
+    renderOrdersTable(orders, "search-results", false);
+  }catch(e){
+    document.getElementById("search-results").innerHTML = `<p style="color:red;">${e.message}</p>`;
+  }
+});
+
+// ----------- Initial View -----------
+showSection('orders');
+activateButton(btnOrders);
+loadAllOrders();
+
+// ---------- Modal Exports for global ----------
+window.closeInvoiceModal = closeInvoiceModal;
+window.downloadInvoicePDF = downloadInvoicePDF;
+window.viewInvoice = viewInvoice;
+window.deleteOrder = deleteOrder;
+
+</script>
+</body>
+</html>
